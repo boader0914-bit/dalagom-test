@@ -836,7 +836,6 @@ h3 {
     align-items: center;
     justify-content: center;
     padding: 3rem;
-    background: var(--color-white);
     text-align: center;
 }
 
@@ -844,5 +843,5 @@ h3 {
     max-width: 280px;
     height: auto;
     margin-bottom: 2rem;
-    filter: drop-shadow(0 10px 20px rgba(0, 0, 0, 0.05));
+    mix-blend-mode: multiply;
 }
