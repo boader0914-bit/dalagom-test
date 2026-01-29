@@ -885,7 +885,8 @@ h3 {
     color: rgba(255, 255, 255, 0.3);
     text-transform: uppercase;
     letter-spacing: 0.05em;
-    min-width: 60px;
+    width: 100px;
+    display: inline-block;
 }
 
 .footer-contact .value {
