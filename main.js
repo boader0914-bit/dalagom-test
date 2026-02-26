@@ -1,95 +1,79 @@
-/**
- * 큐플컴퍼니 Landing Page Interactions
- */
+document.addEventListener("DOMContentLoaded", () => {
+    // 1. Accordion implementation (FAQ & Engine)
+    const accordions = document.querySelectorAll(".accordion-header, .engine-header, .faq-header");
+    accordions.forEach((acc) => {
+        acc.addEventListener("click", function () {
+            this.classList.toggle("active");
+            const panel = this.nextElementSibling;
+            if (panel.style.maxHeight) {
+                panel.style.maxHeight = null;
+                panel.classList.remove('active');
+            } else {
+                panel.style.maxHeight = panel.scrollHeight + 60 + "px"; // added extra padding buffer
+                panel.classList.add('active');
+            }
+        });
+    });
 
-document.addEventListener('DOMContentLoaded', () => {
-    // 1. Engine Card Toggle
-    window.toggleEngineDetail = (card) => {
-        // Toggle active class on the clicked card
-        card.classList.toggle('active');
+    // 2. Number Counter Animation on scroll
+    const counters = document.querySelectorAll('.counter-value');
+    let hasAnimated = false;
 
-        // Optional: Close other cards when one is opened
-        const allCards = document.querySelectorAll('.engine-card');
-        allCards.forEach(c => {
-            if (c !== card) c.classList.remove('active');
+    const animateCounters = () => {
+        counters.forEach(counter => {
+            const target = +counter.getAttribute('data-target');
+            // If the element doesn't have a numeric target, just skip or fade
+            if (isNaN(target)) return;
+
+            const increment = target / 40;
+
+            let current = 0;
+            const updateCounter = () => {
+                if (current < target) {
+                    current = Math.ceil(current + increment);
+                    counter.innerText = current;
+                    setTimeout(updateCounter, 40);
+                } else {
+                    counter.innerText = target;
+                }
+            };
+            updateCounter();
         });
     };
 
-    // 2. Scroll Animations (Fade-in)
+    // 3. Scroll Intersection Observer for reveal animations & counters
     const observerOptions = {
-        threshold: 0.1
+        threshold: 0.1,
+        rootMargin: "0px 0px -50px 0px"
     };
 
     const observer = new IntersectionObserver((entries) => {
         entries.forEach(entry => {
             if (entry.isIntersecting) {
                 entry.target.classList.add('visible');
+
+                // Trigger counter if metrics section is visible
+                if (entry.target.classList.contains('metrics-section') && !hasAnimated) {
+                    animateCounters();
+                    hasAnimated = true;
+                }
             }
         });
     }, observerOptions);
 
-    // Apply animation to sections and cards
-    const animatedElements = document.querySelectorAll('.section, .metric-card, .engine-card, .feature-item, .value-item, .drop-flash');
-    animatedElements.forEach(el => {
-        el.classList.add('fade-in');
-        observer.observe(el);
-    });
+    const animatedElements = document.querySelectorAll('.fade-in, .metrics-section');
+    animatedElements.forEach(el => observer.observe(el));
 
-    // IntersectionObserver for flash-sequence elements with Loop Logic
-    const flashSequences = document.querySelectorAll('.flash-sequence');
-
-    const startFlashLoop = (el) => {
-        el.classList.add('visible');
-
-        // Total sequence time (7s + 1s buffer) + 5s pause = 13s total loop
-        setTimeout(() => {
-            if (el.dataset.intersecting === 'true') {
-                el.classList.remove('visible');
-                // Short timeout to ensure class removal is registered
-                setTimeout(() => startFlashLoop(el), 500);
-            }
-        }, 12000);
-    };
-
-    const flashObserver = new IntersectionObserver((entries) => {
-        entries.forEach(entry => {
-            if (entry.isIntersecting) {
-                entry.target.dataset.intersecting = 'true';
-                if (!entry.target.classList.contains('visible')) {
-                    startFlashLoop(entry.target);
-                }
-            } else {
-                entry.target.dataset.intersecting = 'false';
-                entry.target.classList.remove('visible');
-            }
-        });
-    }, { threshold: 0.5 });
-
-    flashSequences.forEach(el => flashObserver.observe(el));
-
-    // 3. Smooth Scrolling for Navigation
+    // Smooth Scrolling for anchor links
     document.querySelectorAll('a[href^="#"]').forEach(anchor => {
         anchor.addEventListener('click', function (e) {
             e.preventDefault();
-            const target = document.querySelector(this.getAttribute('href'));
-            if (target) {
-                target.scrollIntoView({
-                    behavior: 'smooth',
-                    block: 'start'
+            const targetEl = document.querySelector(this.getAttribute('href'));
+            if (targetEl) {
+                targetEl.scrollIntoView({
+                    behavior: 'smooth'
                 });
             }
         });
-    });
-
-    // 4. Header Background Change on Scroll
-    const header = document.getElementById('main-header');
-    window.addEventListener('scroll', () => {
-        if (window.scrollY > 50) {
-            header.style.background = 'rgba(255, 255, 255, 0.95)';
-            header.style.boxShadow = '0 2px 20px rgba(0,0,0,0.05)';
-        } else {
-            header.style.background = 'rgba(255, 255, 255, 0.8)';
-            header.style.boxShadow = 'none';
-        }
     });
 });
