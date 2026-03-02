@@ -2,46 +2,1663 @@
 <html lang="ko">
 
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
     <title>큐플컴퍼니 | 숙박 운영 구조 설계 파트너</title>
-    <meta name="description" content="광고비 없이도 예약이 채워지는 숙박 운영 설계. 평일 공실을 줄이고 스스로 돌아가는 구조를 만듭니다.">
-    <link rel="stylesheet" href="style.css">
+    <meta name="description" content="장사가 불안한 숙소의 운영 기준을 점검하고, 가격·상품·평일·응대 흐름을 정리합니다." />
+
+    <!-- Open Graph -->
+    <meta property="og:title" content="큐플컴퍼니 | 숙박 운영 구조 설계 파트너" />
+    <meta property="og:description" content="가격·상품·평일·응대 흐름을 정리해 예약이 흔들리지 않는 상태를 만듭니다." />
+    <meta property="og:image" content="https://www.curatep.com/logo/cuple_logo_new.png" />
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content="https://www.curatep.com/" />
+
+    <!-- Twitter(X) Card -->
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="큐플컴퍼니 | 숙박 운영 구조 설계 파트너" />
+    <meta name="twitter:description" content="가격·상품·평일·응대 흐름을 정리해 예약이 흔들리지 않는 상태를 만듭니다." />
+    <meta name="twitter:image" content="https://www.curatep.com/logo/cuple_logo_new.png" />
+
+    <style>
+        :root {
+            --color-primary: #191f28;
+            --color-accent: #3182f6;
+            --color-bg: #f7f8fa;
+            --color-card: #ffffff;
+            --color-border: #e5e8eb;
+            --color-text-dim: #6b7684;
+            --color-success: #15b79e;
+            --color-warning: #ff7a00;
+            --shadow-soft: 0 10px 30px rgba(15, 23, 42, 0.05);
+            --shadow-card: 0 8px 24px rgba(15, 23, 42, 0.04);
+            --radius-xl: 24px;
+            --radius-lg: 20px;
+            --radius-md: 16px;
+            --radius-sm: 12px;
+            --max-width: 1200px;
+        }
+
+        * {
+            box-sizing: border-box;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            margin: 0;
+            font-family: -apple-system, BlinkMacSystemFont, "Apple SD Gothic Neo", "Pretendard",
+                "Noto Sans KR", "Segoe UI", sans-serif;
+            color: var(--color-primary);
+            background: #fff;
+            line-height: 1.6;
+            word-break: keep-all;
+        }
+
+        a {
+            color: inherit;
+            text-decoration: none;
+        }
+
+        img {
+            max-width: 100%;
+            display: block;
+        }
+
+        .container {
+            width: min(100% - 40px, var(--max-width));
+            margin: 0 auto;
+        }
+
+        .section {
+            padding: 110px 0;
+        }
+
+        .bg-light {
+            background: var(--color-bg);
+        }
+
+        .bg-dark {
+            background: var(--color-primary);
+        }
+
+        .text-center {
+            text-align: center;
+        }
+
+        .eyebrow {
+            display: inline-block;
+            font-size: 14px;
+            font-weight: 800;
+            letter-spacing: -0.01em;
+            color: var(--color-primary);
+            margin-bottom: 14px;
+        }
+
+        h1,
+        h2,
+        h3,
+        h4,
+        p {
+            margin: 0;
+        }
+
+        h1 {
+            font-size: 52px;
+            line-height: 1.22;
+            letter-spacing: -0.03em;
+            font-weight: 800;
+        }
+
+        h2 {
+            font-size: 40px;
+            line-height: 1.28;
+            letter-spacing: -0.03em;
+            font-weight: 800;
+        }
+
+        h3 {
+            font-size: 24px;
+            line-height: 1.35;
+            letter-spacing: -0.02em;
+            font-weight: 800;
+        }
+
+        .body,
+        .hero-subtitle,
+        .problem-intro {
+            color: var(--color-text-dim);
+            font-size: 18px;
+            line-height: 1.8;
+        }
+
+        #main-header {
+            position: sticky;
+            top: 0;
+            z-index: 50;
+            backdrop-filter: blur(16px);
+            background: rgba(255, 255, 255, 0.78);
+            border-bottom: 1px solid rgba(229, 232, 235, 0.9);
+        }
+
+        #main-header .container {
+            min-height: 72px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 20px;
+        }
+
+        .logo {
+            font-weight: 800;
+            font-size: 20px;
+            letter-spacing: -0.02em;
+        }
+
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            min-width: 280px;
+            min-height: 56px;
+            padding: 0 22px;
+            border-radius: 16px;
+            border: 1.2px solid var(--color-border);
+            background: #fff;
+            color: var(--color-primary);
+            font-weight: 700;
+            letter-spacing: -0.01em;
+            transition: all 0.22s ease;
+            box-shadow: none;
+        }
+
+        .btn:hover {
+            background: #f5f5f5;
+            border-color: #d9dee4;
+        }
+
+        .btn-outline {
+            min-width: auto;
+            min-height: 44px;
+            padding: 0 16px;
+            border-radius: 12px;
+            font-size: 14px;
+        }
+
+        .btn-dark-outline {
+            background: transparent;
+            color: #fff;
+            border-color: rgba(255, 255, 255, 0.24);
+        }
+
+        .btn-dark-outline:hover {
+            background: rgba(255, 255, 255, 0.06);
+            border-color: rgba(255, 255, 255, 0.4);
+        }
+
+        .text-link {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            color: var(--color-primary);
+            font-weight: 700;
+            font-size: 15px;
+            letter-spacing: -0.01em;
+            opacity: 0.84;
+            transition: opacity 0.2s ease;
+        }
+
+        .text-link:hover {
+            opacity: 1;
+        }
+
+        .hero {
+            padding: 80px 0 110px;
+        }
+
+        .hero-split {
+            display: grid;
+            grid-template-columns: 1.02fr 0.98fr;
+            gap: 40px;
+            align-items: center;
+        }
+
+        .hero-copy-stack {
+            display: flex;
+            flex-direction: column;
+            align-items: flex-start;
+            gap: 18px;
+        }
+
+        .hero-cta-wrap {
+            margin-top: 14px;
+            display: flex;
+            flex-direction: column;
+            align-items: flex-start;
+            gap: 18px;
+        }
+
+        .hero-note {
+            font-size: 14px;
+            color: var(--color-text-dim);
+            margin-top: 6px;
+        }
+
+        .spline-shell {
+            background: linear-gradient(180deg, #fafbfc 0%, #f3f5f7 100%);
+            border: 1px solid var(--color-border);
+            border-radius: 28px;
+            padding: 12px;
+            box-shadow: var(--shadow-soft);
+        }
+
+        .spline-container {
+            width: 100%;
+            height: 520px;
+            overflow: hidden;
+            border-radius: 22px;
+            background: #fff;
+        }
+
+        .problem-wrap {
+            display: flex;
+            flex-direction: column;
+            gap: 34px;
+        }
+
+        .problem-group {
+            background: #fff;
+            border: 1px solid var(--color-border);
+            border-radius: var(--radius-xl);
+            padding: 28px;
+            box-shadow: var(--shadow-card);
+        }
+
+        .problem-group-header {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 22px;
+        }
+
+        .group-chip {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            min-width: 30px;
+            height: 30px;
+            border-radius: 999px;
+            font-size: 12px;
+            font-weight: 800;
+            color: var(--color-primary);
+            background: rgba(49, 130, 246, 0.08);
+        }
+
+        .group-chip.green {
+            background: rgba(21, 183, 158, 0.12);
+        }
+
+        .problem-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 18px;
+        }
+
+        .problem-card {
+            background: #fbfcfd;
+            border: 1px solid var(--color-border);
+            border-radius: 20px;
+            padding: 24px 20px;
+            min-height: 120px;
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-start;
+            gap: 12px;
+        }
+
+        .problem-icon {
+            font-size: 22px;
+            line-height: 1;
+        }
+
+        .problem-card p {
+            font-size: 16px;
+            line-height: 1.65;
+            color: var(--color-primary);
+            font-weight: 700;
+            letter-spacing: -0.01em;
+        }
+
+        .problem-bridge {
+            text-align: center;
+            font-size: 22px;
+            font-weight: 800;
+            letter-spacing: -0.02em;
+            line-height: 1.5;
+            margin-top: 8px;
+        }
+
+        .section-header {
+            max-width: 900px;
+            margin: 0 auto 52px;
+        }
+
+        .section-header p {
+            margin-top: 16px;
+        }
+
+        .what-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 24px;
+        }
+
+        .what-card,
+        .step-card,
+        .result-card,
+        .work-card,
+        .proof-card,
+        .review-card,
+        .faq-item {
+            background: var(--color-card);
+            border: 1px solid var(--color-border);
+            border-radius: var(--radius-lg);
+            box-shadow: var(--shadow-card);
+        }
+
+        .what-card {
+            padding: 30px;
+            position: relative;
+            overflow: hidden;
+            transition: transform 0.3s ease, box-shadow 0.3s ease, border-color 0.3s ease;
+        }
+
+        .what-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 10px 30px rgba(15, 23, 42, 0.08);
+            /* slightly stronger shadow */
+            border-color: #d1d6db;
+            /* slightly darker border */
+        }
+
+        .what-card::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background: var(--color-accent);
+            transition: width 0.3s ease;
+        }
+
+        .what-card:active::after {
+            width: 100%;
+        }
+
+        .what-card-watermark {
+            position: absolute;
+            right: 14px;
+            bottom: -10px;
+            font-size: 130px;
+            font-weight: 900;
+            color: var(--color-primary);
+            opacity: 0.05;
+            line-height: 1;
+            z-index: 0;
+            transition: transform 0.3s ease, opacity 0.3s ease;
+            pointer-events: none;
+        }
+
+        .what-card:hover .what-card-watermark {
+            transform: scale(1.03);
+            opacity: 0.08;
+        }
+
+        .what-card>* {
+            position: relative;
+            z-index: 1;
+        }
+
+        .what-card::before {
+            content: "";
+            position: absolute;
+            left: 0;
+            top: 0;
+            width: 4px;
+            height: 100%;
+            background: var(--color-accent);
+            z-index: 1;
+            /* Keep above watermark */
+        }
+
+        .card-topline {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 16px;
+            margin-bottom: 16px;
+        }
+
+        .num-chip {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 38px;
+            height: 38px;
+            border-radius: 999px;
+            background: #f2f4f6;
+            font-size: 13px;
+            font-weight: 800;
+            color: var(--color-primary);
+        }
+
+        .eng-tag {
+            font-size: 12px;
+            font-weight: 800;
+            letter-spacing: 0.03em;
+            color: #8b95a1;
+            text-transform: uppercase;
+        }
+
+        .what-card h3 {
+            margin-bottom: 12px;
+            font-size: 26px;
+        }
+
+        .what-card p {
+            color: var(--color-text-dim);
+            font-size: 17px;
+            line-height: 1.8;
+            font-weight: 600;
+        }
+
+        .what-intro {
+            font-size: 20px;
+            font-weight: 700;
+            color: var(--color-text-dim);
+            margin-top: 16px;
+        }
+
+        .what-intro-highlight {
+            color: var(--color-primary);
+            position: relative;
+            display: inline-block;
+            cursor: default;
+        }
+
+        .what-intro-highlight::after {
+            content: '';
+            position: absolute;
+            bottom: -2px;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background-color: var(--color-accent);
+            transition: width 0.4s ease;
+        }
+
+        .what-intro-highlight:hover::after {
+            width: 100%;
+        }
+
+        .what-note {
+            text-align: center;
+            margin-top: 24px;
+            color: var(--color-text-dim);
+            font-size: 14px;
+            display: none;
+            /* User requested removal */
+        }
+
+        .start-intro {
+            max-width: 880px;
+            margin: 0 auto 34px;
+            color: var(--color-text-dim);
+            font-size: 18px;
+            line-height: 1.8;
+        }
+
+        .start-steps {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 22px;
+            margin-bottom: 26px;
+        }
+
+        .step-card {
+            padding: 28px;
+            text-align: left;
+        }
+
+        .step-badge {
+            display: inline-flex;
+            align-items: center;
+            padding: 8px 14px;
+            border-radius: 999px;
+            background: #edf4ff;
+            color: var(--color-primary);
+            font-size: 13px;
+            font-weight: 800;
+            margin-bottom: 18px;
+        }
+
+        .step-badge.dark {
+            background: #e9eef4;
+        }
+
+        .step-card h3 {
+            margin-bottom: 10px;
+        }
+
+        .step-card p {
+            color: var(--color-text-dim);
+            font-size: 16px;
+            line-height: 1.75;
+            font-weight: 600;
+        }
+
+        .result-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 22px;
+            margin-top: 30px;
+        }
+
+        .result-card {
+            padding: 26px;
+            text-align: left;
+        }
+
+        .result-card .res-num {
+            font-size: 18px;
+            font-weight: 800;
+            display: block;
+            margin-bottom: 12px;
+            color: var(--color-accent);
+        }
+
+        .result-card .res-title {
+            display: block;
+            font-size: 22px;
+            font-weight: 800;
+            margin-bottom: 10px;
+            letter-spacing: -0.02em;
+        }
+
+        .result-card .res-desc {
+            color: var(--color-text-dim);
+            font-size: 16px;
+            line-height: 1.7;
+            margin-bottom: 12px;
+            font-weight: 600;
+        }
+
+        .result-card .res-direction {
+            color: var(--color-primary);
+            font-size: 15px;
+            font-weight: 800;
+            letter-spacing: -0.01em;
+        }
+
+        .work-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 22px;
+        }
+
+        .work-card {
+            padding: 28px;
+            text-align: left;
+        }
+
+        .work-card h3 {
+            margin-bottom: 14px;
+        }
+
+        .work-card p {
+            color: var(--color-text-dim);
+            font-size: 16px;
+            line-height: 1.8;
+            font-weight: 600;
+        }
+
+        /* How We Work Sequential Shadow Animation */
+        @media (min-width: 769px) {
+            .work-card {
+                /* Add default transition for smooth fallback */
+                transition: box-shadow 0.4s ease, border-color 0.4s ease, transform 0.25s ease;
+                animation: flowShadowAnim 3s infinite;
+            }
+
+            /* Stagger animations for each card */
+            .work-card:nth-child(1) {
+                animation-delay: 0s;
+            }
+
+            .work-card:nth-child(2) {
+                animation-delay: 1s;
+            }
+
+            .work-card:nth-child(3) {
+                animation-delay: 2s;
+            }
+
+            /* Pastel blue shadow effect */
+            @keyframes flowShadowAnim {
+
+                0%,
+                100% {
+                    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.04);
+                    /* Base resting shadow */
+                    border-color: #eee;
+                }
+
+                15% {
+                    /* Pastel blue shadow glow peak */
+                    box-shadow: 0 0 0 4px rgba(49, 130, 246, 0.15), 0 8px 30px rgba(49, 130, 246, 0.1);
+                    border-color: rgba(49, 130, 246, 0.5);
+                }
+
+                40% {
+                    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.04);
+                    border-color: #eee;
+                }
+            }
+        }
+
+        .work-summary {
+            margin-top: 26px;
+            text-align: center;
+            font-size: 18px;
+            line-height: 1.8;
+            color: var(--color-primary);
+            font-weight: 700;
+        }
+
+        .proof-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 24px;
+        }
+
+        /* Dashboard UI */
+        .dash-row {
+            background: #fff;
+            border-radius: 12px;
+            padding: 16px;
+            margin-bottom: 12px;
+            border: 1px solid #e2e8f0;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.02);
+        }
+
+        .dash-row:last-child {
+            margin-bottom: 0;
+        }
+
+        .dash-month {
+            font-size: 15px;
+            font-weight: 800;
+            color: #1e293b;
+            margin-bottom: 12px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .dash-month .badge {
+            background: #f1f5f9;
+            color: #475569;
+            font-size: 12px;
+            padding: 4px 10px;
+            border-radius: 20px;
+            font-weight: 600;
+        }
+
+        .dash-metrics {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 8px;
+        }
+
+        .dash-metric {
+            background: #f8fafc;
+            padding: 12px 10px;
+            border-radius: 8px;
+            border: 1px solid #f1f5f9;
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+        }
+
+        .dash-metric .label {
+            font-size: 11px;
+            color: #64748b;
+            font-weight: 700;
+        }
+
+        .dash-metric .value {
+            font-size: 16px;
+            font-weight: 800;
+            color: #0f172a;
+            display: flex;
+            align-items: baseline;
+            gap: 4px;
+            flex-wrap: wrap;
+        }
+
+        .dash-metric .value .up {
+            color: #ef4444;
+            font-size: 13px;
+            font-weight: 800;
+        }
+
+        /* Partner Interview Section */
+        .partner-interview {
+            padding: 80px 0;
+            background: #fff;
+        }
+
+        .interview-inner {
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 50px;
+            background: #ffffff;
+            border-radius: 24px;
+            border: 2px solid #03C75A;
+            position: relative;
+            box-shadow: 0 10px 30px rgba(3, 199, 90, 0.08);
+            text-align: center;
+        }
+
+        /* .interview-inner pseudo elements removed for standard box styling */
+
+        .interview-label {
+            display: inline-block;
+            font-size: 14px;
+            font-weight: 800;
+            color: #03C75A;
+            background: rgba(3, 199, 90, 0.1);
+            padding: 6px 16px;
+            border-radius: 20px;
+            margin-bottom: 24px;
+        }
+
+        .interview-text {
+            margin: 0;
+            font-size: 20px;
+            line-height: 1.8;
+            color: #191f28;
+            font-weight: 700;
+        }
+
+        .interview-author {
+            margin-top: 24px;
+            font-size: 16px;
+            font-weight: 600;
+            color: #4e5968;
+        }
+
+        @media (max-width: 768px) {
+            .proof-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .dash-metrics {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            .interview-inner {
+                padding: 30px 20px;
+            }
+
+            .interview-text {
+                font-size: 17px;
+            }
+        }
+
+        .proof-card {
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+            min-height: 100%;
+        }
+
+        .pc-header {
+            padding: 24px 24px 18px;
+            color: #15803d;
+            /* Text color matched to stabilization badge text */
+            background: #dcfce7;
+            /* Background color matched to stabilization badge */
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            min-height: 106px;
+            /* Increased to ensure equal height for both cards */
+        }
+
+        .pc-header.green {
+            background: #dcfce7;
+        }
+
+        .pc-header h3 {
+            margin: 0;
+            font-size: 24px;
+            line-height: 1.4;
+            width: 100%;
+            text-align: center;
+        }
+
+        .pc-body {
+            padding: 24px;
+            display: flex;
+            flex-direction: column;
+            gap: 18px;
+            flex: 1;
+        }
+
+        .metric-row {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 14px;
+        }
+
+        .metric-box {
+            background: #f8fafc;
+            border: 1px solid var(--color-border);
+            border-radius: 16px;
+            padding: 18px;
+        }
+
+        .metric-box .label {
+            display: block;
+            font-size: 13px;
+            color: var(--color-text-dim);
+            margin-bottom: 8px;
+            font-weight: 700;
+        }
+
+        .metric-box .value {
+            font-size: 30px;
+            font-weight: 800;
+            line-height: 1.15;
+            letter-spacing: -0.03em;
+        }
+
+        .metric-box .sub {
+            margin-top: 6px;
+            font-size: 13px;
+            color: var(--color-text-dim);
+            font-weight: 700;
+        }
+
+        .proof-note-box,
+        .quote-card,
+        .kw-box {
+            background: #f8fafc;
+            border: 1px solid var(--color-border);
+            border-radius: 18px;
+            padding: 20px;
+        }
+
+        .proof-note-box p,
+        .kw-box p,
+        .quote-card p {
+            font-size: 16px;
+            line-height: 1.8;
+            color: var(--color-primary);
+            font-weight: 600;
+        }
+
+        .spec-table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 14px;
+            overflow: hidden;
+            border-radius: 14px;
+        }
+
+        .spec-table th,
+        .spec-table td {
+            padding: 14px 12px;
+            text-align: center;
+            border-bottom: 1px solid var(--color-border);
+            background: #fff;
+        }
+
+        .spec-table thead th {
+            background: #f8fafc;
+            color: var(--color-primary);
+            font-weight: 800;
+        }
+
+        .kw-item {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 16px;
+            padding: 16px 0;
+            border-bottom: 1px solid var(--color-border);
+        }
+
+        .kw-item:last-child {
+            border-bottom: 0;
+            padding-bottom: 0;
+        }
+
+        .kw-name {
+            display: block;
+            font-size: 18px;
+            font-weight: 800;
+            margin-bottom: 4px;
+        }
+
+        .kw-meta {
+            color: var(--color-text-dim);
+            font-size: 13px;
+            font-weight: 700;
+        }
+
+        .kw-rank {
+            font-size: 22px;
+            font-weight: 800;
+            white-space: nowrap;
+        }
+
+        .proof-source {
+            margin-top: auto;
+            padding-top: 16px;
+            border-top: 1px solid var(--color-border);
+            color: var(--color-text-dim);
+            font-size: 12px;
+            font-weight: 700;
+        }
+
+        .quote-card blockquote {
+            margin: 0;
+            font-size: 18px;
+            line-height: 1.9;
+            color: var(--color-primary);
+            font-weight: 700;
+            letter-spacing: -0.01em;
+        }
+
+        .quote-card cite {
+            display: block;
+            margin-top: 16px;
+            font-style: normal;
+            color: var(--color-text-dim);
+            font-size: 14px;
+            font-weight: 800;
+        }
+
+        .reviews-section {
+            padding: 110px 0;
+            background: #fff;
+        }
+
+        .review-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 20px;
+        }
+
+        .review-card {
+            padding: 24px;
+        }
+
+        .reviewer-info {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 16px;
+        }
+
+        .avatar {
+            width: 44px;
+            height: 44px;
+            border-radius: 999px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 800;
+            font-size: 17px;
+            flex-shrink: 0;
+        }
+
+        .reviewer-name {
+            font-weight: 800;
+            font-size: 15px;
+            color: var(--color-primary);
+        }
+
+        .reviewer-meta {
+            font-size: 13px;
+            color: var(--color-text-dim);
+            font-weight: 700;
+        }
+
+        .review-text {
+            font-size: 15px;
+            color: var(--color-primary);
+            line-height: 1.8;
+            font-weight: 600;
+            margin-bottom: 16px;
+        }
+
+        .review-tags {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+        }
+
+        .review-tag {
+            display: inline-flex;
+            align-items: center;
+            padding: 8px 12px;
+            border-radius: 999px;
+            border: 1px solid var(--color-border);
+            background: #fff;
+            color: var(--color-primary);
+            font-size: 12px;
+            font-weight: 800;
+        }
+
+        .review-tag.highlight {
+            background: #f3f8ff;
+            border-color: #d9e8ff;
+        }
+
+        .faq-container {
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+            max-width: 900px;
+            margin: 0 auto;
+        }
+
+        .faq-item {
+            overflow: hidden;
+        }
+
+        .faq-header {
+            width: 100%;
+            padding: 22px 24px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 18px;
+            cursor: pointer;
+            font-size: 18px;
+            font-weight: 800;
+            color: var(--color-primary);
+            background: #fff;
+        }
+
+        .faq-header .icon {
+            color: #8b95a1;
+            transition: transform 0.2s ease;
+            flex-shrink: 0;
+        }
+
+        .faq-item.active .faq-header .icon {
+            transform: rotate(180deg);
+        }
+
+        .faq-body {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.28s ease;
+            background: #fff;
+        }
+
+        .faq-body-inner {
+            padding: 0 24px 24px;
+            color: var(--color-text-dim);
+            font-size: 16px;
+            line-height: 1.85;
+            font-weight: 600;
+        }
+
+        .final-cta {
+            padding: 110px 0;
+        }
+
+        .final-cta .container {
+            max-width: 860px;
+        }
+
+        .final-cta h2 {
+            color: #fff;
+            margin-bottom: 16px;
+        }
+
+        .final-cta p {
+            color: rgba(255, 255, 255, 0.72);
+            font-size: 18px;
+            line-height: 1.8;
+        }
+
+        .final-cta .btn-wrap {
+            margin-top: 30px;
+            display: flex;
+            justify-content: center;
+        }
+
+        footer {
+            padding: 56px 0 40px;
+            color: rgba(255, 255, 255, 0.82);
+            background: var(--color-primary);
+            border-top: 1px solid rgba(255, 255, 255, 0.08);
+        }
+
+        .footer-logo {
+            font-size: 20px;
+            font-weight: 800;
+            margin-bottom: 24px;
+            color: #fff;
+        }
+
+        .footer-contact {
+            display: flex;
+            justify-content: center;
+            flex-wrap: wrap;
+            gap: 36px;
+            margin-bottom: 28px;
+        }
+
+        .footer-contact .label {
+            display: block;
+            font-size: 13px;
+            color: rgba(255, 255, 255, 0.48);
+            margin-bottom: 6px;
+            font-weight: 700;
+        }
+
+        .footer-contact .value {
+            color: #fff;
+            font-size: 20px;
+            font-weight: 700;
+        }
+
+        .footer-bottom {
+            margin-top: 10px;
+            padding-top: 18px;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            font-size: 13px;
+            color: rgba(255, 255, 255, 0.5);
+            text-align: center;
+        }
+
+        .reviews-section {
+            background: #f8f9fa;
+        }
+
+        .review-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 24px;
+            margin-top: 48px;
+        }
+
+        .review-card {
+            background: #fff;
+            padding: 32px;
+            border-radius: 20px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.03);
+            border: 1px solid rgba(0, 0, 0, 0.04);
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+
+        .reviewer-info {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .reviewer-info .avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            font-size: 16px;
+        }
+
+        .reviewer-meta {
+            font-size: 13px;
+            color: #8b95a1;
+            margin-top: 2px;
+        }
+
+        .reviewer-name {
+            font-weight: 700;
+            color: #191f28;
+            font-size: 15px;
+        }
+
+        .review-text {
+            font-size: 15px;
+            line-height: 1.6;
+            color: #333d4b;
+            flex-grow: 1;
+        }
+
+        .review-text-content {
+            display: -webkit-box;
+            -webkit-box-orient: vertical;
+            -webkit-line-clamp: 3;
+            line-clamp: 3;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .review-text-content.expanded {
+            -webkit-line-clamp: unset;
+            line-clamp: unset;
+        }
+
+        .review-more-btn {
+            display: inline-block;
+            align-self: flex-start;
+            margin-top: 8px;
+            font-size: 14px;
+            color: #8b95a1;
+            cursor: pointer;
+            font-weight: 600;
+            background: none;
+            border: none;
+            padding: 0;
+            text-decoration: underline;
+        }
+
+        .review-more-btn:hover {
+            color: #333d4b;
+        }
+
+        .review-tags {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            margin-top: auto;
+            padding-top: 16px;
+            border-top: 1px dashed #e5e8eb;
+        }
+
+        .review-tag {
+            font-size: 13px;
+            padding: 6px 12px;
+            border-radius: 20px;
+            background: #f2f4f6;
+            color: #4e5968;
+            font-weight: 600;
+        }
+
+        .review-tag.highlight {
+            background: #ffebee;
+            color: #d32f2f;
+        }
+
+        .review-tag:nth-child(2) {
+            background: #e3f2fd;
+            color: #1976d2;
+        }
+
+        .review-tag:nth-child(3) {
+            background: #e8f5e9;
+            color: #388e3c;
+        }
+
+        .fade-in {
+            opacity: 1;
+            transform: none;
+        }
+
+        /* Flash Effect Styling */
+        .flash-effect {
+            animation: softFlash 2.5s infinite;
+        }
+
+        .flash-effect.delay-1 {
+            animation-delay: 1.25s;
+        }
+
+        @keyframes softFlash {
+
+            0%,
+            100% {
+                box-shadow: var(--shadow-card);
+                border-color: var(--color-border);
+            }
+
+            50% {
+                box-shadow: 0 0 20px rgba(49, 130, 246, 0.4);
+                border-color: rgba(49, 130, 246, 0.6);
+            }
+        }
+
+        @media (max-width: 1180px) {
+            .problem-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+
+        @media (max-width: 980px) {
+
+            .hero-split,
+            .what-grid,
+            .start-steps,
+            .result-grid,
+            .proof-grid,
+            .work-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .hero {
+                padding-top: 44px;
+            }
+
+            .spline-container {
+                height: 440px;
+            }
+
+            h1 {
+                font-size: 42px;
+            }
+
+            h2 {
+                font-size: 34px;
+            }
+        }
+
+        @media (max-width: 768px) {
+
+            .section,
+            .proof-section,
+            .final-cta {
+                padding: 82px 0;
+            }
+
+            .container {
+                width: min(100% - 28px, var(--max-width));
+            }
+
+            #main-header .container {
+                min-height: 64px;
+            }
+
+            .btn {
+                min-width: 100%;
+            }
+
+            .hero-cta-wrap {
+                width: 100%;
+            }
+
+            h1 {
+                font-size: 34px;
+            }
+
+            h2 {
+                font-size: 29px;
+            }
+
+            h3 {
+                font-size: 22px;
+            }
+
+            .problem-grid {
+                grid-template-columns: 1fr 1fr;
+                gap: 14px;
+            }
+
+            .problem-card {
+                min-height: 100px;
+                padding: 20px 16px;
+            }
+
+            .problem-card p {
+                font-size: 14px;
+                line-height: 1.65;
+            }
+
+            .what-card,
+            .step-card,
+            .result-card,
+            .work-card,
+            .naver-review-card,
+            .proof-card .pc-body {
+                padding: 22px;
+            }
+
+            .review-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .faq-header {
+                font-size: 16px;
+                padding: 18px 18px;
+            }
+
+            .faq-body-inner {
+                padding: 0 18px 18px;
+                font-size: 15px;
+            }
+        }
+
+        @media (max-width: 560px) {
+            .problem-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .spline-container {
+                height: 380px;
+            }
+
+            .hero-copy-stack {
+                gap: 14px;
+            }
+
+            .body,
+            .hero-subtitle,
+            .problem-intro,
+            .start-intro {
+                font-size: 16px;
+            }
+
+            .problem-bridge {
+                font-size: 19px;
+            }
+        }
+
+        .how-start {
+            padding: 100px 0;
+        }
+
+        .how-start .section-desc {
+            font-size: 18px;
+            line-height: 1.7;
+            color: #4e5968;
+            margin-top: 16px;
+        }
+
+        .diagnosis-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 24px;
+            margin-top: 60px;
+            align-items: start;
+        }
+
+        .diagnosis-card {
+            border: 1px solid #eee;
+            border-radius: 16px;
+            overflow: hidden;
+            background: #fff;
+            transition: all 0.25s ease;
+            height: max-content;
+            align-self: start;
+        }
+
+        .diagnosis-card:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.05);
+        }
+
+        .diagnosis-toggle {
+            width: 100%;
+            padding: 24px;
+            display: flex;
+            gap: 16px;
+            align-items: flex-start;
+            background: none;
+            border: none;
+            text-align: left;
+            cursor: pointer;
+        }
+
+        .diagnosis-toggle .number {
+            font-size: 14px;
+            font-weight: 600;
+            color: #888;
+        }
+
+        .diagnosis-toggle .title-wrap {
+            flex: 1;
+        }
+
+        .diagnosis-toggle h3 {
+            margin: 0 0 6px;
+            font-size: 18px;
+            color: #191f28;
+        }
+
+        .diagnosis-toggle p {
+            margin: 0;
+            font-size: 14px;
+            color: #666;
+            font-weight: 500;
+        }
+
+        .diagnosis-toggle .toggle-icon {
+            font-size: 14px;
+            color: #8b95a1;
+            transition: transform 0.3s ease;
+            flex-shrink: 0;
+            margin-top: 2px;
+        }
+
+        .diagnosis-card.active .toggle-icon {
+            transform: rotate(180deg);
+        }
+
+        .diagnosis-content {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.3s ease, padding 0.3s ease;
+            padding: 0 24px;
+        }
+
+        .diagnosis-card.active {
+            border-color: #3182f6;
+            box-shadow: 0 8px 30px rgba(49, 130, 246, 0.08);
+        }
+
+        .diagnosis-card.active .diagnosis-content {
+            padding: 0 24px 24px;
+            max-height: 300px;
+        }
+
+        .diagnosis-content p {
+            font-size: 16px;
+            line-height: 1.6;
+            color: #4e5968;
+            margin: 0 0 16px 0;
+        }
+
+        .diagnosis-content p strong {
+            color: #191f28;
+        }
+
+        .diagnosis-content .solution {
+            font-size: 16px;
+            font-weight: 600;
+            color: #3182f6;
+            margin-top: 16px;
+            background: #f1f8ff;
+            padding: 12px 16px;
+            border-radius: 8px;
+            display: inline-block;
+        }
+
+        @media (max-width: 768px) {
+            .diagnosis-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
 </head>
 
 <body>
     <!-- HEADER -->
     <header id="main-header">
         <div class="container">
-            <a href="#" class="logo">큐플컴퍼니</a>
+            <a href="#hero" class="logo">큐플컴퍼니</a>
             <nav>
-                <a href="#consulting" class="btn btn-outline">상담 요청</a>
+                <a href="https://forms.gle/7UopsG7yx8f425HF7" target="_blank" class="btn btn-outline">내 숙소 운영 구조
+                    확인하기</a>
             </nav>
         </div>
     </header>
 
     <main>
-        <!-- HERO SECTION -->
-        <section id="hero" class="hero text-center" style="background: none; padding-top: 100px;">
-            <div class="container grid grid-2-equal items-center gap-5 hero-split">
-                <div class="hero-text-content" style="text-align: left; color: var(--color-primary);">
-                    <span class="eyebrow" style="color:var(--color-accent); font-size:18px;">Partnership</span>
-                    <h1 style="color: var(--color-primary); font-size: 48px; margin-bottom: 24px;">광고비 없이도 예약이
-                        채워지는<br>숙박 운영 설계</h1>
-                    <p class="hero-subtitle" style="color: var(--color-text-dim);">3개월, 구조 하나로 바뀝니다.</p>
-                    <div class="cta-group" style="justify-content: flex-start;">
-                        <a href="https://forms.gle/EEU8qB9Ykm5VdWRG8" target="_blank" class="btn btn-primary">
-                            무료 진단 받기
+        <!-- HERO -->
+        <section id="hero" class="hero">
+            <div class="container hero-split">
+                <div class="hero-copy-stack">
+                    <span class="eyebrow">Partnership</span>
+
+                    <h1>
+                        매출이 흔들리는 이유는<br />
+                        시설이 아니라 구조입니다.
+                    </h1>
+
+                    <p class="hero-subtitle">
+                        매출이 늘어도 수익이 남지 않는 구조라면,
+                    </p>
+
+                    <p class="hero-subtitle">
+                        가격, 상품, 판매채널, 응대 기준이 각자 따로<br />
+                        움직이고 있지는 않은지부터 봅니다.
+                    </p>
+
+                    <p class="hero-subtitle">
+                        어떻게 노출하고 판매할지보다,<br />
+                        무엇을 먼저 정리하고 설계해야<br />
+                        할지부터 봅니다.
+                    </p>
+
+                    <div class="hero-cta-wrap">
+                        <a href="https://forms.gle/7UopsG7yx8f425HF7" target="_blank" class="btn">
+                            내 숙소 운영 구조 확인하기
                         </a>
-                        <a href="#success-cases" class="btn btn-secondary">
-                            실제 사례 보기
+
+                        <a href="#proof" class="text-link">
+                            실제 사례 먼저 보기
+                            <span>→</span>
                         </a>
                     </div>
                 </div>
-                <!-- Original Spline Element Restored -->
-                <div class="hero-visual-content fade-in">
-                    <div class="spline-container rounded-lg"
-                        style="width: 100%; height: 500px; overflow: hidden; border: none; background: transparent;">
+
+                <div class="spline-shell fade-in">
+                    <div class="spline-container">
                         <iframe src="https://my.spline.design/r4xbot-zxwxr89igt6q527UlV4mavvn/" frameborder="0"
                             width="100%" height="100%"></iframe>
                     </div>
@@ -49,832 +1666,927 @@
             </div>
         </section>
 
-        <!-- PROBLEM SECTION (고민 공감) -->
+        <!-- PROBLEM -->
         <section class="section bg-light" id="problem">
-            <div class="container fade-in">
-                <div class="text-center mb-5">
+            <div class="container">
+                <div class="section-header text-center">
                     <span class="eyebrow">Problem</span>
-                    <h2>숙박업 대표님, 이런 고민 하고 계신가요?</h2>
-                </div>
-                <div class="grid grid-3">
-                    <div class="problem-card">
-                        <span class="problem-icon">💸</span>
-                        <h3>광고비가 계속 올라간다</h3>
-                        <p class="small mt-2">"작년엔 월 200만원이면 됐는데, 올해는 300만원 써도 예약이 안 채워져요"</p>
-                    </div>
-                    <div class="problem-card">
-                        <span class="problem-icon">📉</span>
-                        <h3>평일 객실이 절반은 빈다</h3>
-                        <p class="small mt-2">"주말은 풀방인데 월~목은 30%도 안 찬 날이 많아요"</p>
-                    </div>
-                    <div class="problem-card">
-                        <span class="problem-icon">😰</span>
-                        <h3>내가 없으면 운영이 멈춘다</h3>
-                        <p class="small mt-2">"톡톡 응대, 가격 조정, 예약 관리... 제가 다 해야 돌아가요"</p>
-                    </div>
-                </div>
-                <div class="text-center mt-5">
-                    <p class="body" style="font-weight:600; color:var(--color-primary);">👉 이런 상황, 구조를 바꾸면 달라집니다.</p>
-                </div>
-            </div>
-        </section>
-
-        <!-- SOLUTION (Why 큐플컴퍼니) -->
-        <section class="section">
-            <div class="container text-center fade-in max-w-800">
-                <span class="eyebrow">Solution</span>
-                <h2>유행을 쫓는 마케팅이 아닙니다.<br>현장에서 작동하는 지속가능한 구조입니다.</h2>
-                <p class="body mt-4">큐플컴퍼니는 단순 광고 대행이나 1회성 컨설팅으로 끝나지 않습니다.</p>
-                <p class="body">숙박업의 매입부터 시공, 직영, 컨설팅, 매각까지 전 과정을 겪으며 터득한 '흔들리지 않는 구조'를 파트너의 비즈니스에 심어드립니다.</p>
-
-                <div class="mt-5"
-                    style="display: flex; flex-direction: column; align-items: center; justify-content: center; margin-top: 60px;">
-                    <img src="assets/logo_repaired.png" alt="큐플컴퍼니 로고" class="animated-logo"
-                        style="height: 250px; margin-bottom: 30px; object-fit: contain;">
-                    <a href="https://forms.gle/r6y1X2NswP6HmuUM7" target="_blank" class="btn btn-primary"
-                        style="border-radius: 100px; padding: 16px 40px; font-size: 18px;">
-                        종합컨설팅 상담하기
-                    </a>
-                </div>
-            </div>
-        </section>
-
-        <!-- METRICS / IMPACT SECTION -->
-        <section id="metrics" class="section bg-dark metrics-section">
-            <div class="container fade-in">
-                <h2 class="text-center" style="color:var(--color-white);">숫자로 증명하는 변화의 기준</h2>
-                <div class="grid grid-3 mt-5">
-                    <div class="metric-card">
-                        <div class="metric-value-wrap">
-                            <span class="metric-value counter-value" data-target="20">0</span><span
-                                class="metric-value">%+</span>
-                        </div>
-                        <div class="metric-label" style="color:var(--color-white);">평일 예약률 개선</div>
-                        <div class="metric-desc" style="color:rgba(255,255,255,0.7);">특정 타겟을 가두지 않는 상품 설계</div>
-                    </div>
-                    <div class="metric-card">
-                        <div class="metric-value-wrap">
-                            <span class="metric-value">Down</span>
-                        </div>
-                        <div class="metric-label" style="color:var(--color-white);">광고 의존도 감소</div>
-                        <div class="metric-desc" style="color:rgba(255,255,255,0.7);">단계적 구조 전환을 통한 이익률 개선</div>
-                    </div>
-                    <div class="metric-card">
-                        <div class="metric-value-wrap">
-                            <span class="metric-value">Min</span>
-                        </div>
-                        <div class="metric-label" style="color:var(--color-white);">운영 개입 시간 감소</div>
-                        <div class="metric-desc" style="color:rgba(255,255,255,0.7);">운영 기준 문서화로 인력 부담 최소화</div>
-                    </div>
-                </div>
-                <p class="small text-center mt-5" style="color:rgba(255,255,255,0.5);">※ 3개월 구조 안착 완료 기준, 실제 파트너사 평균 성과
-                </p>
-
-                <div class="text-center mt-5">
-                    <h3 style="color:var(--color-white);">우리 숙박업소도 가능할까요?</h3>
-                    <a href="https://forms.gle/vCxYbGtp6Y2eK73S9" target="_blank" class="btn btn-primary mt-3">무료 진단
-                        신청하기</a>
-                </div>
-            </div>
-        </section>
-
-        <!-- HOW IT WORKS & FEATURES CONSOLIDATED -->
-        <section class="section bg-light" id="how-it-works">
-            <div class="container fade-in">
-                <div class="text-center mb-5">
-                    <span class="eyebrow">How It Works</span>
-                    <h2>구조를 바꾸면 나타나는 3가지 힘</h2>
-                    <p class="body mt-2">유행이나 꼼수가 아닌, 본질적인 변화를 만듭니다.</p>
+                    <h2>
+                        매출이 흔들리는 이유는<br />
+                        두 가지에서 시작됩니다
+                    </h2>
                 </div>
 
-                <div class="grid-stack gap-10 mt-5">
-                    <!-- Feature 1 -->
-                    <div class="grid grid-2-equal items-center gap-5 feature-item fade-in">
-                        <div class="feature-content">
-                            <div class="value-icon mb-3" style="display:inline-block;">01</div>
-                            <h3 style="color:var(--color-primary); font-size:32px;">광고 없이도 예약이 유지되는 구조</h3>
-                            <p class="subhead mt-2"
-                                style="font-size: 1.25rem; color: var(--color-secondary); font-weight: 600;">비교하지 않게 만드는
-                                상품 설계</p>
-
-                            <p class="body mt-4">가격으로 비교하는 고객이 아닌, 우리 숙소의 '경험'을 선택하는 고객을 자연 유입시킵니다.</p>
-                            <ul class="body mt-3" style="list-style-type: none; padding-left: 0;">
-                                <li style="margin-bottom: 12px; display:flex; gap:10px;"><span
-                                        style="color:var(--color-secondary);">✔</span> 선택 기준이 명확히 보이는 상품 구성</li>
-                                <li style="margin-bottom: 12px; display:flex; gap:10px;"><span
-                                        style="color:var(--color-secondary);">✔</span> 가격 비교 대신 '경험' 기준의 제안</li>
-                                <li style="margin-bottom: 12px; display:flex; gap:10px;"><span
-                                        style="color:var(--color-secondary);">✔</span> 단순 옵션 나열이 아닌 시나리오형 구성</li>
-                            </ul>
+                <div class="problem-wrap">
+                    <div class="problem-group fade-in flash-effect">
+                        <div class="problem-group-header">
+                            <span class="group-chip">①</span>
+                            <h3>상품이 선명하지 않으면</h3>
                         </div>
-                        <div class="feature-visual bg-white rounded-lg overflow-hidden shadow"
-                            style="height: 480px; padding: 20px; box-shadow: 0 20px 40px rgba(0,0,0,0.05);">
-                            <img src="scenario.jpg" alt="시나리오형 구성"
-                                style="width: 100%; height: 100%; object-fit: cover; border-radius: 12px;">
+
+                        <div class="problem-grid">
+                            <div class="problem-card">
+                                <div class="problem-icon">🧩</div>
+                                <p>왜 선택해야 하는지 바로 보이지 않습니다</p>
+                            </div>
+                            <div class="problem-card">
+                                <div class="problem-icon">⚖️</div>
+                                <p>장점보다 가격이 먼저 보입니다</p>
+                            </div>
+                            <div class="problem-card">
+                                <div class="problem-icon">📅</div>
+                                <p>평일에 방문할 이유가 없어 공실이 반복됩니다</p>
+                            </div>
+                            <div class="problem-card">
+                                <div class="problem-icon">📦</div>
+                                <p>구성이 복잡하거나 애매해 결정이 늦어집니다</p>
+                            </div>
                         </div>
                     </div>
 
-                    <!-- Feature 2 -->
-                    <div class="grid grid-2-equal items-center gap-5 feature-item fade-in" style="direction: rtl;">
-                        <div class="feature-content" style="direction: ltr;">
-                            <div class="value-icon mb-3" style="display:inline-block;">02</div>
-                            <h3 style="color:var(--color-primary); font-size:32px;">대표가 빠져도 흔들리지 않는 운영</h3>
-                            <p class="subhead mt-2"
-                                style="font-size: 1.25rem; color: var(--color-secondary); font-weight: 600;">사람이 바뀌어도
-                                유지되는 기준 공유</p>
-
-                            <p class="body mt-4">직관이나 감에 의존하지 않고, 톡톡/스마트콜 등 응대 기준점과 가격을 문서화합니다.</p>
-                            <ul class="body mt-3" style="list-style-type: none; padding-left: 0;">
-                                <li style="margin-bottom: 12px; display:flex; gap:10px;"><span
-                                        style="color:var(--color-secondary);">✔</span> 상황별 톡톡 및 스마트콜 응대 매뉴얼화</li>
-                                <li style="margin-bottom: 12px; display:flex; gap:10px;"><span
-                                        style="color:var(--color-secondary);">✔</span> 반복되는 단순 문의의 자동 분기 처리</li>
-                                <li style="margin-bottom: 12px; display:flex; gap:10px;"><span
-                                        style="color:var(--color-secondary);">✔</span> 가격 판단 및 현장 대응 기준 정리</li>
-                            </ul>
+                    <div class="problem-group fade-in flash-effect delay-1">
+                        <div class="problem-group-header">
+                            <span class="group-chip green">②</span>
+                            <h3>운영 흐름이 정리되지 않으면</h3>
                         </div>
-                        <div class="feature-visual bg-white rounded-lg overflow-hidden shadow"
-                            style="height: 480px; direction: ltr; padding: 20px; box-shadow: 0 20px 40px rgba(0,0,0,0.05);">
-                            <img src="talk_response.jpg" alt="운영 기준의 문서화"
-                                style="width: 100%; height: 100%; object-fit: cover; border-radius: 12px;">
+
+                        <div class="problem-grid">
+                            <div class="problem-card">
+                                <div class="problem-icon">🕸️</div>
+                                <p>예약과 문의 흐름이 분리되어 결정이 늦어집니다</p>
+                            </div>
+                            <div class="problem-card">
+                                <div class="problem-icon">⏱️</div>
+                                <p>답변 기준이 없어 신뢰가 흔들립니다</p>
+                            </div>
+                            <div class="problem-card">
+                                <div class="problem-icon">🔁</div>
+                                <p>문의는 오지만 예약으로 이어지지 않습니다</p>
+                            </div>
+                            <div class="problem-card">
+                                <div class="problem-icon">💸</div>
+                                <p>결국 손님은 더 단순한 선택으로 이동합니다</p>
+                            </div>
                         </div>
                     </div>
 
-                    <!-- Feature 3 -->
-                    <div class="grid grid-2-equal items-center gap-5 feature-item fade-in">
-                        <div class="feature-content">
-                            <div class="value-icon mb-3" style="display:inline-block;">03</div>
-                            <h3 style="color:var(--color-primary); font-size:32px;">평일 공실률을 획기적으로 줄이는 이유</h3>
-                            <p class="subhead mt-2"
-                                style="font-size: 1.25rem; color: var(--color-secondary); font-weight: 600;">특정 타겟을 가두지
-                                않는 유연한 구조</p>
+                    <div class="problem-bridge">
+                        이 문제들은<br />
+                        각각 따로 생기는 것이 아닙니다.
 
-                            <p class="body mt-4">배제되지 않는 상품 설계, 워케이션/반려견 등 확장성을 열어두어 평일 예약의 설득력을 높입니다.</p>
-                            <ul class="body mt-3" style="list-style-type: none; padding-left: 0;">
-                                <li style="margin-bottom: 12px; display:flex; gap:10px;"><span
-                                        style="color:var(--color-secondary);">✔</span> 누구 한 그룹이라도 배제되지 않는 상품 설계</li>
-                                <li style="margin-bottom: 12px; display:flex; gap:10px;"><span
-                                        style="color:var(--color-secondary);">✔</span> 평일 고객(워케이션 등)을 위한 맞춤 경험 제공</li>
-                                <li style="margin-bottom: 12px; display:flex; gap:10px;"><span
-                                        style="color:var(--color-secondary);">✔</span> 공실을 자연스럽고 매력적인 대안으로 전환</li>
-                            </ul>
-                        </div>
-                        <div class="feature-visual bg-white rounded-lg overflow-hidden shadow"
-                            style="height: 480px; padding: 20px; box-shadow: 0 20px 40px rgba(0,0,0,0.05);">
-                            <img src="accommodation.jpg" alt="평일 공실이 줄어드는 이유"
-                                style="width: 100%; height: 100%; object-fit: cover; border-radius: 12px;">
-                        </div>
+                        <p style="margin-top: 16px; font-size: 18px; color: var(--color-text-dim); font-weight: 600;">
+                            상품이 흐려지면 가격 비교가 시작되고,<br />
+                            채널이 늘어날수록 운영은 더 분산됩니다.
+                        </p>
+
+                        <p style="margin-top: 16px; font-size: 18px; color: var(--color-text-dim); font-weight: 600;">
+                            OTA는 광고가 아니라<br />
+                            경쟁 안에서 노출을 나누는 구조입니다.
+                        </p>
+
+                        <p style="margin-top: 24px; font-size: 20px; color: var(--color-primary); font-weight: 800;">
+                            결국 문제는 채널의 수가 아니라<br />
+                            운영 구조가 하나로 정리되어 있지 않다는 점입니다.
+                        </p>
                     </div>
                 </div>
             </div>
         </section>
 
-        <!-- OPERATION ENGINE (시스템) -->
-        <section class="section">
-            <div class="container fade-in">
-                <div class="text-center mb-5">
-                    <span class="eyebrow">System</span>
-                    <h2>6가지 운영 모듈로 구조를 만듭니다</h2>
-                    <p class="body mt-2">각 모듈은 독립적으로 작동하면서 서로 유기적으로 연결됩니다.</p>
+        <!-- WHAT WE DO -->
+        <section class="section" id="what-we-do">
+            <div class="container">
+                <div class="section-header text-center">
+                    <p class="what-intro" style="margin-top: 0; margin-bottom: 24px;">
+                        그래서 우리는<br />
+                        <span class="what-intro-highlight">상품·가격·채널·운영이 함께 작동하는 구조부터 다시 설계합니다.</span>
+                    </p>
                 </div>
-                <div class="engine-grid">
-                    <!-- 1 -->
-                    <div class="engine-item">
-                        <div class="engine-header">
-                            <span>1. 상품 구성 기준</span>
-                            <span class="icon">▼</span>
+
+                <div class="what-grid">
+                    <div class="what-card fade-in">
+                        <div class="what-card-watermark">01</div>
+                        <div class="card-topline">
+                            <span class="num-chip">01</span>
+                            <span class="eng-tag">Reason</span>
                         </div>
-                        <div class="engine-body">
-                            <p><strong>무엇을:</strong> 고객 여정 맞춤 상품 라인업</p>
-                            <p><strong>왜 필요:</strong> 비교하지 않게 만드는 구조 형성</p>
-                            <p><strong>결과:</strong> 평균 객단가 상승</p>
-                        </div>
+                        <h3>선택 이유를 선명하게 만듭니다</h3>
+                        <p>
+                            이미 있는 자산을 정리해<br />
+                            왜 여기여야 하는지 바로 보이게 합니다.
+                        </p>
                     </div>
-                    <!-- 2 -->
-                    <div class="engine-item">
-                        <div class="engine-header">
-                            <span>2. 가격 설정 기준</span>
-                            <span class="icon">▼</span>
+
+                    <div class="what-card fade-in">
+                        <div class="what-card-watermark">02</div>
+                        <div class="card-topline">
+                            <span class="num-chip">02</span>
+                            <span class="eng-tag">Price</span>
                         </div>
-                        <div class="engine-body">
-                            <p><strong>무엇을:</strong> 데이터 기반 동적/탄력 가격</p>
-                            <p><strong>왜 필요:</strong> 평일과 주말 수익 균형</p>
-                            <p><strong>결과:</strong> 평일 예약률 개선</p>
-                        </div>
+                        <h3>가격이 기준 위에서 움직이게 합니다</h3>
+                        <p>
+                            주변 시세에 반응하는 운영이 아니라,<br />
+                            현장에 맞는 기준으로 먼저 움직입니다.
+                        </p>
                     </div>
-                    <!-- 3 -->
-                    <div class="engine-item">
-                        <div class="engine-header">
-                            <span>3. 플레이스 구조</span>
-                            <span class="icon">▼</span>
+
+                    <div class="what-card fade-in">
+                        <div class="what-card-watermark">03</div>
+                        <div class="card-topline">
+                            <span class="num-chip">03</span>
+                            <span class="eng-tag">Weekday</span>
                         </div>
-                        <div class="engine-body">
-                            <p><strong>무엇을:</strong> 클릭 단계 최적화 브랜드 페이지</p>
-                            <p><strong>왜 필요:</strong> 검색 후 이탈 최소화</p>
-                            <p><strong>결과:</strong> 무광고 자연유입 전환 증가</p>
-                        </div>
+                        <h3>평일에 올 이유를 만듭니다</h3>
+                        <p>
+                            단순 할인 대신,<br />
+                            방문 이유를 설계합니다.
+                        </p>
                     </div>
-                    <!-- 4 -->
-                    <div class="engine-item">
-                        <div class="engine-header">
-                            <span>4. 사진·소개글 흐름</span>
-                            <span class="icon">▼</span>
+
+                    <div class="what-card fade-in">
+                        <div class="what-card-watermark">04</div>
+                        <div class="card-topline">
+                            <span class="num-chip">04</span>
+                            <span class="eng-tag">Flow</span>
                         </div>
-                        <div class="engine-body">
-                            <p><strong>무엇을:</strong> 구매 결정에 이르는 시각 내러티브</p>
-                            <p><strong>왜 필요:</strong> 단순 숙소가 아닌 '경험' 판매</p>
-                            <p><strong>결과:</strong> 예약 결정 시간 단축</p>
-                        </div>
+                        <h3>예약 흐름을 하나로 맞춥니다</h3>
+                        <p>
+                            채널·상담·응대를 연결해<br />
+                            전환이 끊기지 않게 합니다.
+                        </p>
                     </div>
-                    <!-- 5 -->
-                    <div class="engine-item">
-                        <div class="engine-header">
-                            <span>5. 상담응대기준</span>
-                            <span class="icon">▼</span>
-                        </div>
-                        <div class="engine-body">
-                            <p><strong>무엇을:</strong> 질문 분기 시나리오 지침</p>
-                            <p><strong>왜 필요:</strong> 일관된 서비스, 운영 피로도 완화</p>
-                            <p><strong>결과:</strong> 대표 개입 업무 축소</p>
-                        </div>
-                    </div>
-                    <!-- 6 -->
-                    <div class="engine-item">
-                        <div class="engine-header">
-                            <span>6. 운영기록 데이터</span>
-                            <span class="icon">▼</span>
-                        </div>
-                        <div class="engine-body">
-                            <p><strong>무엇을:</strong> 피드백, 지표 데이터화 저장</p>
-                            <p><strong>왜 필요:</strong> 의사결정 자산 구축</p>
-                            <p><strong>결과:</strong> 직원 변동에도 흔들리지 않음</p>
-                        </div>
-                    </div>
+                </div>
+
+                <div class="what-note">
+                    * 모든 숙소와 함께하지는 않습니다. 실제로 바꿀 수 있는 부분이 있는 곳과만 함께합니다.
                 </div>
             </div>
         </section>
 
-        <!-- Actual Case (실제 사례) -->
-        <section id="success-cases" class="section bg-light">
-            <div class="container fade-in">
-                <div class="text-center mb-5">
-                    <span class="eyebrow">Proof</span>
-                    <h2>구조의 힘을 증명하는 파트너 사례</h2>
-                </div>
-                <div class="grid grid-3">
-                    <div class="case-card">
-                        <div class="case-header">
-                            <h3 style="margin-bottom:0; font-size: 20px;">경남 산청 A 글램핑 (운영 6개월)</h3>
-                        </div>
-                        <div class="case-body">
-                            <div class="data-dashboard" style="grid-template-columns: 1fr;">
-                                <div class="data-card"
-                                    style="display: flex; justify-content: space-between; align-items: center;">
-                                    <div>
-                                        <div class="data-card-title">월간 플레이스 유입</div>
-                                        <div class="data-card-value">13,152<span style="font-size: 16px;">회</span></div>
-                                    </div>
-                                    <div class="data-growth up" style="text-align: right;">
-                                        <span style="font-size:16px;">↑</span> 157% 증가 <br> <span
-                                            style="font-weight:400; font-size:11px; color:#888;">(10월
-                                            5,114회)</span>
-                                    </div>
-                                </div>
-                                <div class="data-card"
-                                    style="display: flex; justify-content: space-between; align-items: center;">
-                                    <div>
-                                        <div class="data-card-title">월간 예약·주문 신청</div>
-                                        <div class="data-card-value">278<span style="font-size: 16px;">건</span></div>
-                                    </div>
-                                    <div class="data-growth up" style="text-align: right;">
-                                        <span style="font-size:16px;">↑</span> 132% 증가 <br> <span
-                                            style="font-weight:400; font-size:11px; color:#888;">(10월
-                                            120건)</span>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="dashboard-caption">※ 구조 최적화 직후 폭발적 성장 (10월 → 11월 기준)</div>
+        <!-- HOW WE START -->
+        <section id="how-we-start" class="section how-start">
+            <div class="container">
 
-                            <p class="small" style="font-weight: 500; color: var(--color-primary); margin-bottom: 8px;">
-                                ❄️ 겨울 비수기 (12월~2월) 방어율 현황</p>
-                            <ul class="small text-dim"
-                                style="list-style-type: none; padding-left: 0; margin-bottom: 15px;">
-                                <li style="margin-bottom: 4px;">• <strong>유입량:</strong> 비수기에도 10,000~15,000회 유지 (10월 대비
-                                    2배 이상)</li>
-                                <li style="margin-bottom: 4px;">• <strong>예약량:</strong> 월평균 200건 이상 견고하게 달성 안정화</li>
-                            </ul>
+                <div class="section-header text-center">
+                    <span class="eyebrow">How We Start</span>
+                    <h2>온·오프라인 2단계 운영 확인</h2>
 
-                            <hr style="border:0; border-top:1px dashed var(--color-border); margin:15px 0;">
-                            <div class="grid grid-2-equal" style="gap:10px; margin-bottom:20px;">
-                                <div>
-                                    <p class="small" style="margin-bottom: 5px;"><strong>광고비 절감</strong></p>
-                                    <p class="small text-dim" style="margin-bottom: 0;">월 280만 → <span
-                                            style="color:var(--color-secondary); font-weight:600;">월 120만</span></p>
-                                </div>
-                                <div>
-                                    <p class="small" style="margin-bottom: 5px;"><strong>운영 응대 축소</strong></p>
-                                    <p class="small text-dim" style="margin-bottom: 0;">일 3시간 → <span
-                                            style="color:var(--color-secondary); font-weight:600;">1.2시간</span></p>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="case-card">
-                        <div class="case-header" style="background:var(--color-secondary);">
-                            <h3 style="margin-bottom:0; font-size: 20px;">"광고비를 86% 줄였는데 예약은 오히려 늘었습니다"</h3>
-                        </div>
-                        <div class="case-body"
-                            style="display:flex; flex-direction:column; justify-content:flex-start; height:100%;">
-
-                            <!-- Ad Spend Mini Table -->
-                            <div
-                                style="background:#f1f8f6; border-radius:12px; padding:20px; margin-bottom:20px; border:1px solid #d1e8e2;">
-                                <div
-                                    style="display:flex; justify-content:space-between; align-items:center; margin-bottom:15px;">
-                                    <span style="font-size:14px; font-weight:700; color:var(--color-secondary);">검색 광고
-                                        집행 성과 비교</span>
-                                    <span
-                                        style="font-size:12px; font-weight:500; background:#fff; padding:4px 8px; border-radius:20px; color:var(--color-text-dim);">동일
-                                        키워드 기준</span>
-                                </div>
-
-                                <style>
-                                    .ad-table {
-                                        width: 100%;
-                                        font-size: 13px;
-                                        border-collapse: collapse;
-                                    }
-
-                                    .ad-table th {
-                                        text-align: left;
-                                        padding: 8px 0;
-                                        color: var(--color-text-dim);
-                                        border-bottom: 1px solid rgba(22, 160, 133, 0.2);
-                                        font-weight: 500;
-                                    }
-
-                                    .ad-table td {
-                                        padding: 10px 0;
-                                        border-bottom: 1px solid rgba(22, 160, 133, 0.1);
-                                    }
-
-                                    .ad-table td.col-before {
-                                        color: #888;
-                                        text-decoration: line-through;
-                                    }
-
-                                    .ad-table td.col-after {
-                                        font-weight: 700;
-                                        color: var(--color-secondary);
-                                    }
-                                </style>
-                                <table class="ad-table">
-                                    <thead>
-                                        <tr>
-                                            <th style="width:30%">구분</th>
-                                            <th style="width:35%">1차 (10~12월)</th>
-                                            <th style="width:35%">2차 (1~2월)</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        <tr>
-                                            <td>총 광고비</td>
-                                            <td class="col-before">2,452,835원</td>
-                                            <td class="col-after">342,573원 <span
-                                                    style="font-size:11px; color:#e74c3c; font-weight:700;">(↓86%)</span>
-                                            </td>
-                                        </tr>
-                                        <tr>
-                                            <td>평균 CTR</td>
-                                            <td style="color:#555;">3.30%</td>
-                                            <td class="col-after">3.61% <span
-                                                    style="font-size:11px; color:#e74c3c;">(▲0.31%p)</span></td>
-                                        </tr>
-                                        <tr>
-                                            <td>평균 CPC</td>
-                                            <td style="color:#555;">494원</td>
-                                            <td style="color:var(--color-primary); font-weight:600;">491원 (동일)</td>
-                                        </tr>
-                                    </tbody>
-                                </table>
-                                <p class="small mt-3"
-                                    style="text-align:center; margin-bottom:0; line-height:1.4; color:var(--color-primary);">
-                                    광고비는 단 <strong>14%</strong> 수준으로 축소되었지만,<br>
-                                    오히려 클릭 효율(CTR)은 상승하고 전환이 자연유입으로 대체됨
-                                </p>
-                            </div>
-
-                            <p class="body mt-2" style="font-size: 15px; text-align: right;">"매달 200만 원 이상 빠져나가는 네이버
-                                광고비만 늘어나고 예약이 뚝 끊겨
-                                불안했습니다. 큐플컴퍼니와 구조를 잡고 나니 비용은 줄고 저희 숙소만 보고 결정하는 손님이 늘었습니다. 이제는 평일 빈 방 걱정보다 어떻게 더 나은 경험을 줄
-                                지 고민합니다."</p>
-                            <p class="small mt-2" style="font-weight:600; text-align: right;">- 파트너 글램핑 대표</p>
-                        </div>
-                    </div>
-
-                    <div class="case-card">
-                        <div class="case-header" style="background:#2C3E50;">
-                            <h3 style="margin-bottom:0; font-size: 20px;">경쟁이 치열한 키워드 최상단 점령</h3>
-                        </div>
-                        <div class="case-body"
-                            style="display:flex; flex-direction:column; justify-content:flex-start; height:100%;">
-
-                            <p class="small" style="font-weight: 600; color: #2C3E50; margin-bottom: 8px;">👑 네이버 플레이스
-                                타겟 키워드 장악</p>
-                            <p class="small text-dim mb-3">구조 최적화를 통한 체류시간 증가 및 자연 유입 극대화의 결과입니다.</p>
-
-                            <!-- Ranking Item 1 -->
-                            <div
-                                style="background:#f8f9fa; border-radius:12px; padding:15px; margin-bottom:15px; border:1px solid #e9ecef;">
-                                <div
-                                    style="display:flex; justify-content:space-between; align-items:center; border-bottom:1px dashed #ced4da; padding-bottom:10px; margin-bottom:10px;">
-                                    <span style="font-size:16px; font-weight:700; color:#343a40;">"산청 글램핑"</span>
-                                    <div
-                                        style="background:rgba(44, 62, 80, 0.1); color:#2C3E50; font-weight:700; padding:4px 12px; border-radius:20px; font-size:14px; display:inline-flex; align-items:center; gap:4px;">
-                                        🏆 <span style="font-size: 18px;">1</span>위
-                                    </div>
-                                </div>
-                                <div
-                                    style="display:flex; justify-content:space-between; font-size:12px; color:#6c757d;">
-                                    <span>월간 검색수: <strong style="color:#495057;">3,220</strong>회</span>
-                                </div>
-                            </div>
-
-                            <!-- Ranking Item 2 -->
-                            <div
-                                style="background:#f8f9fa; border-radius:12px; padding:15px; border:1px solid #e9ecef;">
-                                <div
-                                    style="display:flex; justify-content:space-between; align-items:center; border-bottom:1px dashed #ced4da; padding-bottom:10px; margin-bottom:10px;">
-                                    <span style="font-size:16px; font-weight:700; color:#343a40;">"경남글램핑"</span>
-                                    <div
-                                        style="background:rgba(44, 62, 80, 0.1); color:#2C3E50; font-weight:700; padding:4px 12px; border-radius:20px; font-size:14px; display:inline-flex; align-items:center; gap:4px;">
-                                        🏆 <span style="font-size: 18px;">1</span>위
-                                    </div>
-                                </div>
-                                <div
-                                    style="font-size:13px; color:#6c757d; margin-bottom:8px; display:flex; align-items:center; gap:6px;">
-                                    <span style="color:#adb5bd; text-decoration:line-through;">75위</span>
-                                    <span style="font-size:10px; color:#dee2e6;">▶</span>
-                                    <span style="color:#868e96;">20위</span>
-                                    <span style="font-size:10px; color:#dee2e6;">▶</span>
-                                    <strong style="color:#e74c3c;">수직 상승 🚀</strong>
-                                </div>
-                                <div
-                                    style="display:flex; justify-content:space-between; font-size:12px; color:#6c757d;">
-                                    <span>월간 검색수: <strong style="color:#495057;">12,430</strong>회 (대형 키워드)</span>
-                                </div>
-                            </div>
-
-                        </div>
+                    <div class="fade-in" style="margin-top: 32px;">
+                        <p class="section-desc">
+                            우리는 반드시 현장을 포함해<br>
+                            운영 상태를 함께 확인합니다.
+                        </p>
+                        <p class="section-desc">
+                            온라인에서 보이는 문제와<br>
+                            실제 운영에서 생기는 문제는 다르기 때문입니다.
+                        </p>
+                        <p class="section-desc"
+                            style="margin-top: 32px; font-weight: 700; color: var(--color-primary);">
+                            현재 상태를 정확히 봅니다.
+                        </p>
+                        <p class="section-desc">
+                            어디에서 손님이 망설이는지,<br>
+                            어디에서 흐름이 끊기는지부터 찾습니다.
+                        </p>
+                        <p class="section-desc"
+                            style="margin-top: 32px; font-size: 22px; color: #191f28; font-weight: 800;">
+                            원인을 정확히 보면<br>
+                            무엇부터 시작해야 할지 선명해집니다.
+                        </p>
                     </div>
                 </div>
-            </div>
-        </section>
 
-        <!-- REVIEWS SECTION -->
-        <section class="section" style="background-color: #fafbfc; padding-top: 80px; padding-bottom: 80px;">
-            <div class="container fade-in">
-                <div class="text-center mb-5">
-                    <span class="eyebrow"
-                        style="color:var(--color-secondary); background:var(--color-secondary-light); padding:4px 12px; border-radius:20px; font-size:13px; font-weight:700;">Real
-                        Reviews</span>
-                    <h2 style="margin-top:10px;">변화를 증명하는 실제 고객의 목소리</h2>
-                    <p class="text-dim mt-2">구조 최적화 이후, 만족도 높은 체류 경험이 자발적인 리뷰 확산으로 이어집니다.</p>
-                </div>
-
-                <style>
-                    .review-grid {
-                        display: grid;
-                        grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
-                        gap: 20px;
-                        align-items: start;
-                    }
-
-                    .review-card {
-                        background: #fff;
-                        border-radius: 16px;
-                        padding: 24px;
-                        box-shadow: 0 4px 24px rgba(0, 0, 0, 0.04);
-                        border: 1px solid rgba(0, 0, 0, 0.04);
-                        transition: transform 0.3s ease, box-shadow 0.3s ease;
-                        height: 100%;
-                        display: flex;
-                        flex-direction: column;
-                    }
-
-                    .review-card:hover {
-                        transform: translateY(-5px);
-                        box-shadow: 0 12px 30px rgba(0, 0, 0, 0.08);
-                    }
-
-                    .reviewer-info {
-                        display: flex;
-                        align-items: center;
-                        gap: 12px;
-                        margin-bottom: 16px;
-                    }
-
-                    .avatar {
-                        width: 44px;
-                        height: 44px;
-                        border-radius: 50%;
-                        background: #f1f8f6;
-                        display: flex;
-                        align-items: center;
-                        justify-content: center;
-                        color: var(--color-primary);
-                        font-weight: 700;
-                        font-size: 16px;
-                    }
-
-                    .reviewer-name {
-                        font-weight: 700;
-                        font-size: 15px;
-                        color: #2c3e50;
-                        margin-bottom: 2px;
-                    }
-
-                    .reviewer-meta {
-                        font-size: 12px;
-                        color: #adb5bd;
-                    }
-
-                    .review-text {
-                        font-size: 15px;
-                        line-height: 1.6;
-                        color: #495057;
-                        margin-bottom: 18px;
-                        letter-spacing: -0.3px;
-                        flex-grow: 1;
-                    }
-
-                    .review-tags {
-                        display: flex;
-                        flex-wrap: wrap;
-                        gap: 8px;
-                    }
-
-                    .review-tag {
-                        background: #f8f9fa;
-                        color: #6c757d;
-                        padding: 6px 12px;
-                        border-radius: 6px;
-                        font-size: 12px;
-                        font-weight: 600;
-                        border: 1px solid #e9ecef;
-                    }
-
-                    .review-tag.highlight {
-                        background: #e6fcf5;
-                        color: #0ca678;
-                        border-color: #c3fae8;
-                    }
-                </style>
-
-                <div class="review-grid">
-                    <!-- Review 1 -->
-                    <div class="review-card">
-                        <div class="reviewer-info">
-                            <div class="avatar" style="background:#e3f2fd; color:#1976d2;">1</div>
-                            <div>
-                                <div class="reviewer-name">100****</div>
-                                <div class="reviewer-meta">영수증 리뷰 · 1번째 방문</div>
+                <div class="start-steps diagnosis-grid" style="margin-top: 40px;">
+                    <div class="diagnosis-card fade-in">
+                        <button class="diagnosis-toggle">
+                            <div class="title-wrap">
+                                <span class="step-badge" style="display:inline-block; margin-bottom:12px;">1단계 · 온라인
+                                    진단</span>
+                                <h3>온라인 진단</h3>
                             </div>
-                        </div>
-                        <div class="review-text">
-                            "급하게 하루전 예약하고 왔는데 다른 방문객 리뷰처럼 난방도 잘되서 춥지않고 고기도 푸짐하고 맛있어요. 같이주신 된장은 아이가 세번이나 리필해서 먹었네요^^"
-                        </div>
-                        <div class="review-tags">
-                            <span class="review-tag highlight">✨ 고기가 맛있어요</span>
-                            <span class="review-tag">🚽 화장실이 잘 되어있어요</span>
-                        </div>
-                    </div>
-
-                    <!-- Review 2 -->
-                    <div class="review-card">
-                        <div class="reviewer-info">
-                            <div class="avatar" style="background:#fff3e0; color:#f57c00;">k</div>
-                            <div>
-                                <div class="reviewer-name">kimm****</div>
-                                <div class="reviewer-meta">예약 리뷰 · 1번째 방문</div>
-                            </div>
-                        </div>
-                        <div class="review-text">
-                            "솔직히 이가격으로 가는게 민망할 정도로 좋습니다. 뭐 남는게 있을까? 생각도 해보았습니다. 너무 친절하시고 무제한 바베큐부터 뭐 흠 잡을게 없었습니다. 최고의
-                            숙소입니다. 꼭 재방문 할게요^^"
-                        </div>
-                        <div class="review-tags">
-                            <span class="review-tag highlight">✨ 깨끗해요</span>
-                            <span class="review-tag">🛏️ 침구가 좋아요</span>
-                            <span class="review-tag">🛁 온수가 잘 나와요</span>
+                            <span class="toggle-icon">▼</span>
+                        </button>
+                        <div class="diagnosis-content">
+                            <p>
+                                노출, 상품 구성, 가격, 상세페이지, 채널 흐름을 점검합니다.<br />
+                                <strong>전환이 멈추는 구간을 먼저 찾습니다.</strong>
+                            </p>
                         </div>
                     </div>
 
-                    <!-- Review 3 -->
-                    <div class="review-card">
-                        <div class="reviewer-info">
-                            <div class="avatar" style="background:#f3e5f5; color:#7b1fa2;">m</div>
-                            <div>
-                                <div class="reviewer-name">myb****</div>
-                                <div class="reviewer-meta">예약 리뷰 · 1번째 방문</div>
+                    <div class="diagnosis-card fade-in">
+                        <button class="diagnosis-toggle">
+                            <div class="title-wrap">
+                                <span class="step-badge dark" style="display:inline-block; margin-bottom:12px;">2단계 · 현장
+                                    방문 진단</span>
+                                <h3>현장 방문 진단</h3>
                             </div>
-                        </div>
-                        <div class="review-text">
-                            "사장님 너무 친절하시고 침구류 깨끗하고 이런곳이 있는줄 첨알았네요 너무 아이랑 놀기좋은곳입니다"
-                        </div>
-                        <div class="review-tags">
-                            <span class="review-tag highlight">👶 아이와 가기 좋아요</span>
-                            <span class="review-tag">✨ 깨끗해요</span>
-                            <span class="review-tag">🛏️ 침구가 좋아요</span>
-                        </div>
-                    </div>
-
-                    <!-- Review 4 -->
-                    <div class="review-card">
-                        <div class="reviewer-info">
-                            <div class="avatar" style="background:#e8f5e9; color:#388e3c;">송</div>
-                            <div>
-                                <div class="reviewer-name">송은경**</div>
-                                <div class="reviewer-meta">예약 리뷰 · 1번째 방문</div>
-                            </div>
-                        </div>
-                        <div class="review-text">
-                            "사장님이 친절하시고 진짜 너무 좋아요!! 두달만에 지인이랑 함께 같이 또 방문했어요!! 또또또 재방문 할꺼에요! 안오시면 후회합니다 꼭 오세요❤️"
-                        </div>
-                        <div class="review-tags">
-                            <span class="review-tag highlight">❤️ 친절해요</span>
-                            <span class="review-tag">🏞️ 뷰가 좋아요</span>
-                        </div>
-                    </div>
-
-                    <!-- Review 5 -->
-                    <div class="review-card">
-                        <div class="reviewer-info">
-                            <div class="avatar" style="background:#fce4ec; color:#c2185b;">s</div>
-                            <div>
-                                <div class="reviewer-name">sy2****</div>
-                                <div class="reviewer-meta">결제내역 리뷰 · 1번째 방문</div>
-                            </div>
-                        </div>
-                        <div class="review-text">
-                            "아이들과 개딸과 함께한 급여행 너무 행복한 하루 보내고 가요 배드민턴, 자전거 등등 즐길거리가 많아 빈손으로 방문해도 즐길거리가 많아요. 아이들과 개딸이 너무
-                            좋아해서 또 오고싶어요"
-                        </div>
-                        <div class="review-tags">
-                            <span class="review-tag highlight">🐶 반려동물과 가기 좋아요</span>
-                            <span class="review-tag">🏸 즐길 거리가 많아요</span>
-                            <span class="review-tag">📸 사진이 잘 나와요</span>
-                        </div>
-                    </div>
-
-                    <!-- Review 6 -->
-                    <div class="review-card">
-                        <div class="reviewer-info">
-                            <div class="avatar" style="background:#e0f7fa; color:#0097a7;">둠</div>
-                            <div>
-                                <div class="reviewer-name">둠칫둠칫**</div>
-                                <div class="reviewer-meta">영수증 리뷰 · 2번째 방문</div>
-                            </div>
-                        </div>
-                        <div class="review-text">
-                            "귀여운 강아지도 있고 시설도 너무 깨끗해서 좋아요! 저번에 왔었을때 너무 좋아서 이번이 두번째 방문인데 또 힐링하고 갑니다. 사장님께서 너무 친절하셔서 불편함없이
-                            잘놀다갑니다~ 캠핑 팁도 많이 얻어갑니다!"
-                        </div>
-                        <div class="review-tags">
-                            <span class="review-tag highlight">✨ 깨끗해요</span>
-                            <span class="review-tag">💖 친절해요</span>
-                            <span class="review-tag">❄️ 냉난방이 잘돼요</span>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </section>
-
-        <!-- PROCESS SECTION -->
-        <section class="section">
-            <div class="container fade-in">
-                <div class="text-center mb-5">
-                    <span class="eyebrow">Process</span>
-                    <h2>파트너십 진행 방식</h2>
-                </div>
-                <div class="timeline mt-5">
-                    <div class="timeline-item mt-4">
-                        <div class="timeline-marker"></div>
-                        <div class="timeline-content">
-                            <div class="timeline-month">Month 1</div>
-                            <div class="content" style="font-size:18px; font-weight:600;">운영 구조 진단 & 상품 진단</div>
-                            <p class="small mt-2">현재의 비효율 구간과 비용 구조를 파악하고, 숙소만의 특별한 경험을 발굴합니다.</p>
-                        </div>
-                    </div>
-                    <div class="timeline-item mt-4">
-                        <div class="timeline-marker"></div>
-                        <div class="timeline-content">
-                            <div class="timeline-month">Month 2</div>
-                            <div class="content" style="font-size:18px; font-weight:600;">상품 · 플레이스 구조 재설계</div>
-                            <p class="small mt-2">발굴한 매력을 시각적 흐름으로 재편하고, 타겟에 맞춘 상품과 가격 구조를 세팅합니다.</p>
-                        </div>
-                    </div>
-                    <div class="timeline-item mt-4">
-                        <div class="timeline-marker"></div>
-                        <div class="timeline-content">
-                            <div class="timeline-month">Month 3</div>
-                            <div class="content" style="font-size:18px; font-weight:600;">운영 기준 고정 & 문서화</div>
-                            <p class="small mt-2">재설계된 구조를 실전 운영을 통해 검증하고, 매뉴얼화하여 안정화시킵니다.</p>
-                        </div>
-                    </div>
-
-                    <!-- Result Lock-in -->
-                    <div class="timeline-item mt-4">
-                        <div class="timeline-marker"
-                            style="border-color: #e74c3c; animation: timeline-flash 1.5s infinite; box-shadow: 0 0 0 0 rgba(231, 76, 60, 0.7);">
-                        </div>
-                        <div class="timeline-content"
-                            style="background: linear-gradient(135deg, #fff9f9 0%, #fff 100%); border: 2px solid #ffdbd9; box-shadow: 0 10px 30px rgba(231, 76, 60, 0.1);">
-                            <div class="timeline-month"
-                                style="color: #e74c3c; display: flex; align-items: center; gap: 8px;">
-                                <span style="font-size: 20px;">🚀</span> Result
-                            </div>
-                            <div class="content"
-                                style="font-size:20px; font-weight:800; color: #2c3e50; margin-top: 5px;">
-                                폭발적 자연 유입 & 구조적 매출 성장
-                            </div>
-                            <p class="small mt-2" style="color: #495057; font-size: 14px; font-weight: 500;">
-                                불필요한 광고비는 <span style="color:#e74c3c; font-weight:700;">절반 이하</span>로 줄고,<br>
-                                타겟 고객의 <span style="color:#16a085; font-weight:700;">확실한 전환(예약)</span>으로 이어지는 견고한
-                                락인(Lock-in) 시스템이 완성됩니다.
+                            <span class="toggle-icon">▼</span>
+                        </button>
+                        <div class="diagnosis-content">
+                            <p>
+                                접근성, 공간 동선, 안내 방식, 실제 운영 흐름을 직접 확인합니다.<br />
+                                <strong>온라인에서는 보이지 않는 혼선과 불편을 확인합니다.</strong>
                             </p>
                         </div>
                     </div>
                 </div>
+
+                <div class="section-header text-center" style="margin-top: 16px; margin-bottom: 28px;">
+                    <h3 style="font-size: 28px;">점검 결과는 네 가지 유형 중 하나로 정리됩니다.</h3>
+                    <p class="body" style="margin-top: 14px;">
+                        모든 숙소의 문제가 같지는 않습니다.<br />
+                        그래서 먼저, 어디부터 시작할지 정합니다.
+                    </p>
+                </div>
+
+                <div class="diagnosis-grid">
+
+                    <!-- 카드 1 -->
+                    <div class="diagnosis-card">
+                        <button class="diagnosis-toggle">
+                            <span class="number">①</span>
+                            <div class="title-wrap">
+                                <h3>상품·가격 기준이 흐린 경우</h3>
+                                <p>선택 이유가 한눈에 보이지 않는 상태</p>
+                            </div>
+                            <span class="toggle-icon">▼</span>
+                        </button>
+                        <div class="diagnosis-content">
+                            <p>
+                                선택 기준이 명확하지 않으면<br>
+                                <strong>손님은 가격부터 비교하게 됩니다.</strong>
+                            </p>
+                            <p>
+                                상품 수가 많거나<br>
+                                구성이 복잡하면<br>
+                                결정은 늦어집니다.
+                            </p>
+                            <p class="solution">
+                                → 우리는<br>
+                                <strong>상품 구조와 가격 기준을 다시 세웁니다.</strong>
+                            </p>
+                        </div>
+                    </div>
+
+                    <!-- 카드 2 -->
+                    <div class="diagnosis-card">
+                        <button class="diagnosis-toggle">
+                            <span class="number">②</span>
+                            <div class="title-wrap">
+                                <h3>운영 흐름이 정리되지 않은 경우</h3>
+                                <p>응대와 관리가 사람에 따라 달라지는 상태</p>
+                            </div>
+                            <span class="toggle-icon">▼</span>
+                        </button>
+                        <div class="diagnosis-content">
+                            <p>
+                                응대 기준이 없으면<br>
+                                설명이 매번 달라집니다.
+                            </p>
+                            <p>
+                                운영이 사람에 묶이면<br>
+                                결과도 들쭉날쭉합니다.
+                            </p>
+                            <p class="solution">
+                                → 우리는<br>
+                                <strong>운영 기준과 관리 흐름을 정리합니다.</strong>
+                            </p>
+                        </div>
+                    </div>
+
+                    <!-- 카드 3 -->
+                    <div class="diagnosis-card">
+                        <button class="diagnosis-toggle">
+                            <span class="number">③</span>
+                            <div class="title-wrap">
+                                <h3>채널·전환 흐름이 끊긴 경우</h3>
+                                <p>유입은 있지만 예약으로 이어지지 않는 상태</p>
+                            </div>
+                            <span class="toggle-icon">▼</span>
+                        </button>
+                        <div class="diagnosis-content">
+                            <p>
+                                유입은 있는데<br>
+                                예약이 멈춰 있다면<br>
+                                <br>
+                                어딘가에서<br>
+                                <strong>결정이 막히고 있는 것입니다.</strong>
+                            </p>
+                            <p>
+                                채널이 많아질수록<br>
+                                기준은 더 분산됩니다.
+                            </p>
+                            <p class="solution">
+                                → 우리는<br>
+                                <strong>전환이 멈추는 구간부터 연결합니다.</strong>
+                            </p>
+                        </div>
+                    </div>
+
+                    <!-- 카드 4 -->
+                    <div class="diagnosis-card">
+                        <button class="diagnosis-toggle">
+                            <span class="number">④</span>
+                            <div class="title-wrap">
+                                <h3>기반 준비가 필요한 경우</h3>
+                                <p>공간·상품의 기본 정리가 부족한 상태</p>
+                            </div>
+                            <span class="toggle-icon">▼</span>
+                        </button>
+                        <div class="diagnosis-content">
+                            <p>
+                                공간이나 상품의 기본 정리가 부족하면<br>
+                                <strong>운영만으로는 한계가 있습니다.</strong>
+                            </p>
+                            <p class="solution">
+                                → 우리는<br>
+                                <strong>필요한 준비 사항부터 안내합니다.</strong>
+                            </p>
+                        </div>
+                    </div>
+
+                </div>
+
+                <div class="what-note" style="display: block; margin-top: 60px;">
+                    * 모든 숙소와 함께하지는 않습니다.<br>
+                    실제로 바꿀 수 있는 부분이 있는 곳과만 함께합니다.
+                </div>
+
             </div>
         </section>
 
-        <!-- FAQ SECTION -->
-        <section class="section bg-light">
-            <div class="container fade-in">
-                <div class="text-center mb-5">
-                    <span class="eyebrow">FAQ</span>
-                    <h2>자주 묻는 질문</h2>
+        <!-- HOW WE WORK -->
+        <section class="section" id="tracks">
+            <div class="container">
+                <div class="section-header text-center">
+                    <span class="eyebrow">How We Work</span>
+                    <h2>진행은 이렇게 합니다</h2>
+                    <p class="body">
+                        점검 결과에 따라 범위를 정하고<br />
+                        단계적으로 정리합니다.
+                    </p>
                 </div>
+
+                <div class="work-grid">
+                    <div class="work-card fade-in">
+                        <div class="card-topline">
+                            <span class="num-chip">01</span>
+                        </div>
+                        <h3>기본 정리</h3>
+                        <p>
+                            가격, 상품, 상세페이지, 응대 기준을 먼저 바로잡습니다.<br />
+                            유입된 방문이 이탈하지 않도록 흐름을 정리합니다.
+                        </p>
+                    </div>
+
+                    <div class="work-card fade-in">
+                        <div class="card-topline">
+                            <span class="num-chip">02</span>
+                        </div>
+                        <h3>예약 흐름 강화</h3>
+                        <p>
+                            평일에 방문해야 할 이유를 만들고<br />
+                            채널 의존도를 조정합니다.<br />
+                            예약이 끊기지 않도록 연결합니다.
+                        </p>
+                    </div>
+
+                    <div class="work-card fade-in">
+                        <div class="card-topline">
+                            <span class="num-chip">03</span>
+                        </div>
+                        <h3>기반 보완 제안</h3>
+                        <p>
+                            공간이나 상품 구조가 준비되지 않은 경우,<br />
+                            먼저 필요한 준비 사항을 정리합니다.
+                        </p>
+                    </div>
+                </div>
+
+                <div class="work-summary">
+                    모든 숙소가 같은 방식으로 해결되지는 않습니다.<br />
+                    대신, 무엇을 먼저 바꿀지는 명확히 정리합니다.
+                </div>
+            </div>
+        </section>
+
+        <!-- PROOF -->
+        <section class="section bg-light" id="proof">
+            <div class="container">
+                <div class="section-header text-center">
+                    <span class="eyebrow">Proof</span>
+                    <h2>구조개선 파트너 사례</h2>
+                </div>
+
+                <div class="proof-grid">
+                    <!-- Card 1: Dashboard UI -->
+                    <div class="proof-card fade-in">
+                        <div class="pc-header">
+                            <h3>경남 산청 월O 글램핑 (운영 6개월)</h3>
+                        </div>
+                        <div class="pc-body" style="background:#f8f9fa; padding:24px;">
+
+                            <!-- 10월 -->
+                            <div class="dash-row">
+                                <div class="dash-month">10월 <span class="badge">개선 시작</span></div>
+                                <div class="dash-metrics">
+                                    <div class="dash-metric">
+                                        <span class="label">유입</span>
+                                        <div class="value">5,114회</div>
+                                    </div>
+                                    <div class="dash-metric">
+                                        <span class="label">예약·주문</span>
+                                        <div class="value">133회</div>
+                                    </div>
+                                    <div class="dash-metric">
+                                        <span class="label">리뷰</span>
+                                        <div class="value">0회</div>
+                                    </div>
+                                    <div class="dash-metric"
+                                        style="flex: 1.5; background: #f1f5f9; padding: 12px; border-radius: 8px;">
+                                        <span class="label">유입키워드 1위</span>
+                                        <div class="value" style="font-size: 14px;">산청글램핑 (29.68%)</div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- 11월 -->
+                            <div class="dash-row">
+                                <div class="dash-month">11월 <span class="badge"
+                                        style="background:#e0f2fe; color:#0369a1;">개선 적용</span></div>
+                                <div class="dash-metrics">
+                                    <div class="dash-metric">
+                                        <span class="label">유입</span>
+                                        <div class="value">13,152회 <span class="up">↑157%</span></div>
+                                    </div>
+                                    <div class="dash-metric">
+                                        <span class="label">예약·주문</span>
+                                        <div class="value">278회 <span class="up">↑109%</span></div>
+                                    </div>
+                                    <div class="dash-metric">
+                                        <span class="label">리뷰</span>
+                                        <div class="value">30회</div>
+                                    </div>
+                                    <div class="dash-metric"
+                                        style="flex: 1.5; background: #f1f5f9; padding: 12px; border-radius: 8px;">
+                                        <span class="label">유입키워드 1위</span>
+                                        <div class="value" style="font-size: 14px;">월O글램핑 (29.43%)</div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- 12월 -->
+                            <div class="dash-row">
+                                <div class="dash-month">12월 <span class="badge"
+                                        style="background:#dcfce7; color:#15803d;">안정화</span></div>
+                                <div class="dash-metrics">
+                                    <div class="dash-metric">
+                                        <span class="label">유입</span>
+                                        <div class="value">15,484회 <span class="up">↑18%</span></div>
+                                    </div>
+                                    <div class="dash-metric">
+                                        <span class="label">예약·주문</span>
+                                        <div class="value">237회 <span class="up">-</span></div>
+                                    </div>
+                                    <div class="dash-metric">
+                                        <span class="label">리뷰</span>
+                                        <div class="value">65회 <span class="up">↑117%</span></div>
+                                    </div>
+                                    <div class="dash-metric"
+                                        style="flex: 1.5; background: #f1f5f9; padding: 12px; border-radius: 8px;">
+                                        <span class="label">유입키워드 1위</span>
+                                        <div class="value" style="font-size: 14px;">경남글램핑 (26.93%)</div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- 1월 -->
+                            <div class="dash-row">
+                                <div class="dash-month">1월 <span class="badge"
+                                        style="background:#dcfce7; color:#15803d;">안정화 유지</span></div>
+                                <div class="dash-metrics">
+                                    <div class="dash-metric">
+                                        <span class="label">유입</span>
+                                        <div class="value">13,002회</div>
+                                    </div>
+                                    <div class="dash-metric">
+                                        <span class="label">예약·주문</span>
+                                        <div class="value">214회</div>
+                                    </div>
+                                    <div class="dash-metric">
+                                        <span class="label">리뷰</span>
+                                        <div class="value">53회</div>
+                                    </div>
+                                    <div class="dash-metric"
+                                        style="flex: 1.5; background: #f1f5f9; padding: 12px; border-radius: 8px;">
+                                        <span class="label">유입키워드 1위</span>
+                                        <div class="value" style="font-size: 14px;">월O글램핑 (41.87%)</div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="proof-source" style="margin-top: 16px; text-align:right;">출처: 네이버 플레이스 인사이트
+                                (2025.10 ~ 2026.01)</div>
+                        </div>
+                    </div>
+
+                    <!-- Card 2: Combined Ad Reduction + Keyword Ranking -->
+                    <div class="proof-card fade-in">
+                        <div class="pc-header green">
+                            <h3>“광고비를 86% 줄였는데 예약은 오히려 늘었습니다”</h3>
+                        </div>
+                        <div class="pc-body">
+                            <!-- 통합 내용 1: 키워드 -->
+                            <div class="kw-box" style="margin-bottom: 24px;">
+                                <p style="margin-bottom: 14px; font-weight:800; color:#191f28;">경쟁이 치열한 키워드 최상단 점령</p>
+                                <div class="kw-item">
+                                    <div>
+                                        <span class="kw-name">산청 글램핑</span>
+                                        <span class="kw-meta">월간 검색수 3,220회</span>
+                                    </div>
+                                    <div class="kw-rank">🏆 1위</div>
+                                </div>
+                                <div class="kw-item">
+                                    <div>
+                                        <span class="kw-name">경남 글램핑</span>
+                                        <span class="kw-meta">75위 → 20위 → 1위 / 월간 12,430회</span>
+                                    </div>
+                                    <div class="kw-rank">🏆 1위</div>
+                                </div>
+                            </div>
+
+                            <!-- 통합 내용 2: 광고비 절감 테이블 -->
+                            <table class="spec-table" style="margin-bottom:20px;">
+                                <thead>
+                                    <tr>
+                                        <th>구분</th>
+                                        <th>개선 전 (10~12월)</th>
+                                        <th>개선 후 (1~2월)</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <th>총 광고비</th>
+                                        <td style="text-decoration:line-through; color:#8b95a1;">2,452,835원</td>
+                                        <td style="font-weight:800; color:#ef4444;">342,573원 (86% 절감)</td>
+                                    </tr>
+                                    <tr>
+                                        <th>평균 CTR</th>
+                                        <td>3.30%</td>
+                                        <td style="font-weight:700; color:#191f28;">3.61%</td>
+                                    </tr>
+                                    <tr>
+                                        <th>평균 CPC</th>
+                                        <td>494원</td>
+                                        <td>491원</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+
+                            <div class="proof-note-box">
+                                <p>
+                                    광고비는 단 14% 수준으로 축소되었지만,<br />
+                                    클릭 효율은 오르고 예약은 자연 유입으로 대체되었습니다.
+                                </p>
+                            </div>
+                            <div class="proof-note-box" style="margin-top: 12px;">
+                                <p>
+                                    네이버 채널 직접 운영으로 수수료 절감.<br />
+                                    <span style="font-size: 14px; color: #64748b;">(예약 대행사 해지로 수수료 10% ~ 15% 절감)</span>
+                                </p>
+                            </div>
+
+                            <div class="proof-source">출처: 네이버 검색광고 리포트 (동일 키워드) 및 플레이스 랭킹</div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+            </div>
+        </section>
+
+        <section class="partner-interview fade-in" style="padding-bottom: 40px;">
+            <div class="container" style="max-width: 700px; margin: 0 auto;">
+                <div class="review-card" style="border: 1px solid #e5e8eb; padding: 32px;">
+                    <div class="reviewer-info">
+                        <div class="avatar" style="background:#f1f5f9; color:#475569;">박</div>
+                        <div>
+                            <div class="reviewer-name">파트너 박진O 대표</div>
+                            <div class="reviewer-meta"></div>
+                        </div>
+                    </div>
+                    <div class="review-text"
+                        style="font-size: 15px; line-height: 1.6; color: #333d4b; font-weight: 500; margin-top: 8px;">
+                        " 매달 200만 원 이상 빠져나가던 광고비가 줄었고,<br />
+                        OTA 수수료는 10~15%에서 3%대로 낮아졌습니다.<br><br>
+
+                        오히려 광고를 더 써도 부담이 없습니다.<br />
+                        이제는 구조가 정리됐다는 확신이 있습니다. "
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- REAL REVIEWS -->
+        <section class="reviews-section" id="reviews">
+            <div class="container">
+                <div class="section-header text-center">
+                    <span class="eyebrow">Real Reviews</span>
+                    <h2>구조 개선 이후 고객 반응</h2>
+                </div>
+
+                <div class="review-grid">
+                    <div class="review-card fade-in">
+                        <div class="reviewer-info">
+                            <div class="avatar" style="background:#e3f2fd; color:#1976d2;">M</div>
+                            <div>
+                                <div class="reviewer-name">Megatop</div>
+                                <div class="reviewer-meta">영수증 리뷰 · 1번째 방문</div>
+                            </div>
+                        </div>
+                        <div class="review-text">
+                            "이 가격에 이런 곳이 있다고요???? 바베큐 무제한에 밥,김치,마늘,쌈장,고추장아찌,옥수수(구이용),토스트용식빵,치즈,버터,딸기잼 이렇게 셀프바(?)에 구비가 되어
+                            있어요!!! 게다가 모든 시설 이용료도 타 글램핑에 비해 엄청 가성비 있는 편으로 너무너무 추천해요!! 수영장에 불멍에 히노끼탕까지!!!심심할 틈 없는 가성비갑
+                            글램핑이에오 ㅎㅎㅎ"
+                        </div>
+                        <div class="review-tags">
+                            <span class="review-tag highlight">🛟 물놀이하기 좋아요</span>
+                            <span class="review-tag">🥩 바비큐 해먹기 좋아요</span>
+                            <span class="review-tag">💰 가성비가 좋아요</span>
+                            <span class="review-tag">👶 아이와 가기 좋아요</span>
+                            <span class="review-tag">🍳 취사시설이 잘 되어있어요</span>
+                        </div>
+                        <div class="review-text"
+                            style="color: #3182f6; font-size: 14px; font-weight: 700; background: #f9fafb; padding: 12px; border-radius: 8px; margin-top: 12px;">
+                            → 가격을 낮춘 것이 아니라, 구성을 다시 정리했습니다.
+                        </div>
+                    </div>
+
+                    <div class="review-card fade-in">
+                        <div class="reviewer-info">
+                            <div class="avatar" style="background:#fff3e0; color:#f57c00;">서</div>
+                            <div>
+                                <div class="reviewer-name">서희우87</div>
+                                <div class="reviewer-meta">예약 리뷰 · 1번째 방문</div>
+                            </div>
+                        </div>
+                        <div class="review-text">
+                            "정신없이 노느라 사진은 비록 많이 없지만 뷰 미쳤고 굉장히 좋았습니다...ㅎㅎㅎ 픽업 하러 오실 때 차타고 가면서 얘기할 때 적자 난다는 이유를 알아버렸어용..
+                            생각한 것보다 놀거리도 많고 바베큐도 무한리필이어서 너무 좋아요 !! 배터지는 줄 알앗어요,, 돈 낸 것 보다 가성비가 훨씬 좋아서 다음에 여름에 또 오고싶어요!!!
+                            힐링 잘 하다가 갑니당 🫶💖"
+                        </div>
+                        <div class="review-tags">
+                            <span class="review-tag highlight">📸 사진이 잘 나와요</span>
+                            <span class="review-tag">🛋️ 인테리어가 멋져요</span>
+                            <span class="review-tag">😌 조용히 쉬기 좋아요</span>
+                            <span class="review-tag">🥩 바비큐 해먹기 좋아요</span>
+                            <span class="review-tag">💰 가성비가 좋아요</span>
+                        </div>
+                        <div class="review-text"
+                            style="color: #3182f6; font-size: 14px; font-weight: 700; background: #f9fafb; padding: 12px; border-radius: 8px; margin-top: 12px;">
+                            → 응대와 안내 흐름을 정리하자 경험의 일관성이 생겼습니다.
+                        </div>
+                    </div>
+
+                    <div class="review-card fade-in">
+                        <div class="reviewer-info">
+                            <div class="avatar" style="background:#f3e5f5; color:#7b1fa2;">b</div>
+                            <div>
+                                <div class="reviewer-name">baggonju</div>
+                                <div class="reviewer-meta">영수증 리뷰 · 1번째 방문</div>
+                            </div>
+                        </div>
+                        <div class="review-text">
+                            "생일과 결혼기념일을 맞아서 가족여행을 다녀왔어요. 추운거 싫어하고 캠핑을 즐기지 않는 편이라 이 겨울에 글램핑 가자는게 그렇게 반갑진 않았는데, 웬걸 저희 연박까지
+                            했습니다!! 뷰는 물론이고 넓은 잔디마당에 수영장, 자쿠지(4개실에 해당), 깨끗한 침구, 완전 뜨뜻한 방, 깔끔한 화장실, 넉넉히 제공해주시는 먹을거리(고기,
+                            국밥, 소시지 등등), 24시간 셀프바(여긴 밥도 토스트도 무한!)까지!! 사장님 너무너무 친절하신 건 감동이고 반려견과 함께 할 수 있는 건 감사하더라고요ㅜㅜ 저희
+                            집에서 한시간 거리인데 아니 이런 곳을 왜 지금 알았나 싶을정도로 너무너무 좋아요!! 아이들이 아빠 생일되면 또 오면 안되냐며...😂 정말 기념일마다 와도 좋겠다
+                            생각이 들었던 만족감 100% 여행이었습니다💙"
+                        </div>
+                        <div class="review-tags">
+                            <span class="review-tag highlight">✨ 깨끗해요</span>
+                            <span class="review-tag">🏞️ 뷰가 좋아요</span>
+                            <span class="review-tag">🏊 물놀이하기 좋아요</span>
+                            <span class="review-tag">🥩 바비큐 해먹기 좋아요</span>
+                            <span class="review-tag">🐶 반려동물과 가기 좋아요</span>
+                        </div>
+                        <div class="review-text"
+                            style="color: #3182f6; font-size: 14px; font-weight: 700; background: #f9fafb; padding: 12px; border-radius: 8px; margin-top: 12px;">
+                            → 비수기가 약점이 아니라 방문 이유가 되도록 설계했습니다.
+                        </div>
+                    </div>
+
+                    <div class="review-card fade-in">
+                        <div class="reviewer-info">
+                            <div class="avatar" style="background:#e8f5e9; color:#388e3c;">w</div>
+                            <div>
+                                <div class="reviewer-name">wed****</div>
+                                <div class="reviewer-meta">예약 리뷰 · 1번째 방문</div>
+                            </div>
+                        </div>
+                        <div class="review-text">
+                            "아이들 겨울방학 여행으로 산청 글램핑장 찾다가 후기가 좋아서 왔는데 너무 좋아요. 오면 폰만 잡고 있을줄 알았던 아이들이 강아지 삥삥이랑 놀고 탁구도 치고 너무 잘
+                            놀아요. 추위가 걱정이었는데 너무 따뜻하게 준비해 주셔서 만족합니다. 글램핑은 가격대가 비쌀거란 생각에 걱정(?)도 많았는데 월명글램핑은 가성비 대박! 무한리필
+                            바베큐에 조식까지 다 준비되어 있으니 즐길 마음의 여유만 가지고 오면 됩니다. 덕분에 너무 잘 쉬고 힐링하고 갑니다♡"
+                        </div>
+                        <div class="review-tags">
+                            <span class="review-tag highlight">✨ 깨끗해요</span>
+                            <span class="review-tag">🚽 화장실이 잘 되어있어요</span>
+                            <span class="review-tag">🛏️ 침구가 좋아요</span>
+                            <span class="review-tag">💖 친절해요</span>
+                            <span class="review-tag">🏞️ 뷰가 좋아요</span>
+                        </div>
+                        <div class="review-text"
+                            style="color: #3182f6; font-size: 14px; font-weight: 700; background: #f9fafb; padding: 12px; border-radius: 8px; margin-top: 12px;">
+                            → 타겟 고객의 니즈를 파악하여, 추가 결제 없는 올인원 구조를 만들었습니다.
+                        </div>
+                    </div>
+
+                    <div class="review-card fade-in">
+                        <div class="reviewer-info">
+                            <div class="avatar" style="background:#fce4ec; color:#c2185b;">애</div>
+                            <div>
+                                <div class="reviewer-name">애순이</div>
+                                <div class="reviewer-meta">예약 리뷰 · 1번째 방문</div>
+                            </div>
+                        </div>
+                        <div class="review-text">
+                            "완전 초강추 숙소입니다! 현장에서 영수증 리뷰가 안돼서 이제야 남깁니다<br><br>추운 겨울 야외 자쿠지, 따뜻한 곳에서 즐기는 프라이빗 무제한 바베큐, 직접
+                            만들어주시는 전기구이 통닭, 불멍에 스모어까지 전부 무료라는게 믿기지 않는 퀄리티입니다<br><br>시간이 있다면 꼭 가보시는 걸 추천드립니다!!!"
+                        </div>
+                        <div class="review-tags">
+                            <span class="review-tag highlight">✨ 깨끗해요</span>
+                            <span class="review-tag">🛏️ 침구가 좋아요</span>
+                            <span class="review-tag">🚰 개수대가 잘 되어있어요</span>
+                            <span class="review-tag">🏞️ 뷰가 좋아요</span>
+                            <span class="review-tag">🛋️ 인테리어가 멋져요</span>
+                        </div>
+                        <div class="review-text"
+                            style="color: #3182f6; font-size: 14px; font-weight: 700; background: #f9fafb; padding: 12px; border-radius: 8px; margin-top: 12px;">
+                            → 고객이 기대하는 가치를 넘어 감동을 주는 포인트를 설계했습니다.
+                        </div>
+                    </div>
+
+                    <div class="review-card fade-in">
+                        <div class="reviewer-info">
+                            <div class="avatar" style="background:#e0f7fa; color:#0097a7;">옆</div>
+                            <div>
+                                <div class="reviewer-name">옆집포도</div>
+                                <div class="reviewer-meta">예약 리뷰 · 1번째 방문</div>
+                            </div>
+                        </div>
+                        <div class="review-text">
+                            "이번에 글램핑 여행으로 방문했는데 전반적으로 만족도가 정말 높았어요. 주변이 산으로 둘러싸여 있어서 공기도 좋고, 도착하자마자 조용하고 한적한 분위기가 마음에
+                            들었습니다. 숙소와 공용 시설 모두 관리가 잘 되어 있어서 깔끔했고, 이용하는 내내 불편함이 거의 없었어요.<br>수영장은 물 상태가 깨끗해서 부담 없이 즐길 수
+                            있었고, 가족이나 친구들과 함께 이용하기에도 좋았습니다. 바베큐 공간도 잘 마련되어 있어서 준비부터 식사까지 편했고, 장비나 공간이 잘 정리되어 있어 처음 이용하는
+                            사람도 어렵지 않게 사용할 수 있었어요.<br>직원분들도 친절하게 안내해 주셔서 전반적으로 편안한 분위기에서 머물 수 있었어요."
+                        </div>
+                        <div class="review-tags">
+                            <span class="review-tag highlight">✨ 깨끗해요</span>
+                            <span class="review-tag">🚽 화장실이 잘 되어있어요</span>
+                            <span class="review-tag">🛏️ 침구가 좋아요</span>
+                            <span class="review-tag">🚿 온수가 잘 나와요</span>
+                            <span class="review-tag">📸 사진이 잘 나와요</span>
+                        </div>
+                        <div class="review-text"
+                            style="color: #3182f6; font-size: 14px; font-weight: 700; background: #f9fafb; padding: 12px; border-radius: 8px; margin-top: 12px;">
+                            → 불필요한 관리를 줄이고, 고객 관리를 자동화했습니다.
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- FAQ -->
+        <section class="section bg-light" id="faq">
+            <div class="container">
+                <div class="section-header text-center">
+                    <span class="eyebrow">FAQ</span>
+                    <h2>진행 전에 많이 묻는 질문</h2>
+                </div>
+
                 <div class="faq-container">
                     <div class="faq-item">
                         <div class="faq-header">
-                            <span>Q: 광고를 완전히 끊어도 되나요?</span>
+                            <span>Q. 예약 문의나 톡톡 상담도 대신 해주시나요?</span>
                             <span class="icon">▼</span>
                         </div>
                         <div class="faq-body">
                             <div class="faq-body-inner">
-                                아니오, 초기에 광고를 무작정 0으로 만드는 것이 목표는 아닙니다. 광고에 "의존"하는 비중을 단계적으로 줄여 나가는 것이며, 실제 파트너사의 경우 평균
-                                40~50%의 광고비 절감을 경험하고 있습니다.
+                                목적은 운영 기준을 정리하는 것입니다.<br><br>
+
+                                초기에는 상담 흐름을 함께 설계하고,<br>
+                                필요한 경우 일정 기간 직접 응대를 지원합니다.<br><br>
+
+                                누가 응대하더라도 같은 기준으로 진행되도록<br>
+                                구조를 정리하는 것이 핵심입니다.
                             </div>
                         </div>
                     </div>
+
                     <div class="faq-item">
                         <div class="faq-header">
-                            <span>Q: 3개월이면 정말 다 바뀌나요?</span>
+                            <span>Q. 진행 비용은 어떻게 되나요?</span>
                             <span class="icon">▼</span>
                         </div>
                         <div class="faq-body">
                             <div class="faq-body-inner">
-                                3개월은 '구조 안착'의 최소 필요 기준입니다. 1개월 차에 진단, 2개월 차에 시범 적용하고, 3개월 차에 매뉴얼로 굳혀집니다. 성과는 빠르면 적용 후
-                                1~2개월 차부터 지표의 변화로 확인할 수 있습니다.
+                                현장 점검 이후, 필요한 범위에 따라 달라집니다.<br><br>
+
+                                모든 숙소에 동일한 금액을 제시하지 않습니다.<br>
+                                상태에 맞는 단계부터 제안합니다.<br><br>
+
+                                무리한 계약을 권하지 않습니다.
                             </div>
                         </div>
                     </div>
+
                     <div class="faq-item">
                         <div class="faq-header">
-                            <span>Q: 우리 업소는 조금 특수한 형태인데 가능할까요?</span>
+                            <span>Q. 우리 업소는 조금 특수한 형태인데 가능할까요?</span>
                             <span class="icon">▼</span>
                         </div>
                         <div class="faq-body">
                             <div class="faq-body-inner">
-                                오히려 획일화된 컨설팅 공식을 쓸 수 없는 '특수한 상황'이 경쟁력이 됩니다. 객실 수, 주변 환경, 타겟층 등 현장 조건에 맞춰 1:1로 맞춤 구조를 설계해
-                                드립니다.
+                                숙소마다 구조와 조건은 다릅니다.<br><br>
+
+                                그래서 먼저 점검을 진행합니다.<br>
+                                운영 개선이 가능한 범위라면 함께하고,<br>
+                                아직 준비가 부족하다면 필요한 방향을 먼저 안내드립니다.
                             </div>
                         </div>
                     </div>
+
                     <div class="faq-item">
                         <div class="faq-header">
-                            <span>Q: 진행 비용은 어떻게 되나요?</span>
+                            <span>Q. 적용 후 언제부터 변화가 나타나나요?</span>
                             <span class="icon">▼</span>
                         </div>
                         <div class="faq-body">
                             <div class="faq-body-inner">
-                                업소의 규모, 현재 적용된 마케팅 비용, 인력 운영 상황에 따라 다릅니다. 사전 "무료 진단" 후 투명하게 프로젝트 예산을 제안해 드립니다. 대부분 줄어드는
-                                광고비와 개선되는 평일 객단가로 비용은 단기간 내 회수됩니다.
+                                현재 상태, 계절성, 지역 경쟁 환경에 따라<br>
+                                속도는 모두 다릅니다.<br><br>
+
+                                특정 기간의 결과를 보장하지는 않습니다.<br>
+                                대신, 개선 가능한 범위와 단계는 명확히 안내드립니다.
                             </div>
                         </div>
                     </div>
-                    <!-- 신규 추가 FAQ -->
+
                     <div class="faq-item">
                         <div class="faq-header">
-                            <span>Q: 예약 문의나 톡톡 상담도 대신 해주시나요?</span>
+                            <span>Q. 광고를 완전히 끊을 수도 있나요?</span>
                             <span class="icon">▼</span>
                         </div>
                         <div class="faq-body">
                             <div class="faq-body-inner">
-                                네, 업무 시간(09:00~18:00) 내 발생하는 예약 전화 및 톡톡 아웃바운드 상담을 전담하여 응대하고, 모든 상담 내역을 파트너사의 귀중한 데이터
-                                자산으로 기록합니다.
+                                광고를 0으로 만드는 것이 목표는 아닙니다.<br><br>
+
+                                지역과 숙소 유형에 따라 광고는 필요할 수 있습니다.<br>
+                                우리가 만드는 것은 광고를 끊는 구조가 아니라,<br>
+                                광고가 필수가 아닌 선택이 되는 상태입니다.<br><br>
+
+                                운영 기준이 정리되면 광고는 버티기 위한 수단이 아니라<br>
+                                필요할 때 전략적으로 사용하는 도구가 됩니다.
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="faq-item">
+                        <div class="faq-header">
+                            <span>Q. 예약 채널을 단일화해도 매출에 영향이 없을까요?</span>
+                            <span class="icon">▼</span>
+                        </div>
+                        <div class="faq-body">
+                            <div class="faq-body-inner">
+                                채널을 줄이는 것이 목적은 아닙니다.<br><br>
+
+                                먼저 상품·가격·응대 기준을 정리하고,<br>
+                                예약이 이어지는 흐름을 만든 뒤<br>
+                                채널 구조를 조정합니다.<br><br>
+
+                                준비 없이 채널을 닫으면 위험합니다.<br>
+                                기준이 정리된 상태에서 조정하면<br>
+                                오히려 수수료와 관리 부담이 줄어듭니다.<br><br>
+
+                                핵심은 “채널 수”가 아니라<br>
+                                “운영 기준이 있는 상태인가”입니다.
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="faq-item">
+                        <div class="faq-header">
+                            <span>Q. 어떤 상품이 있나요?</span>
+                            <span class="icon">▼</span>
+                        </div>
+                        <div class="faq-body">
+                            <div class="faq-body-inner">
+                                1회성 구조 점검 리포트부터<br>
+                                지속적으로 함께하는 운영 파트너 상품까지 구성되어 있습니다.<br><br>
+
+                                상태에 따라 적용 범위를 제안드립니다.
                             </div>
                         </div>
                     </div>
@@ -882,51 +2594,135 @@
             </div>
         </section>
 
-        <!-- CTA FINAL -->
-        <section id="consulting" class="section bg-dark text-center pb-10">
-            <div class="container fade-in">
-                <h2 style="color:var(--color-white);">지금 필요한 건, 무리한 노출이 아니라<br>제대로 된 '구조'입니다.</h2>
-                <p class="body mt-3" style="color:rgba(255,255,255,0.7);">3개월 뒤 달라진 운영을 직접 경험해 보세요.</p>
-                <div class="cta-group mt-5">
-                    <a href="https://forms.gle/EEU8qB9Ykm5VdWRG8" target="_blank" class="btn btn-primary"
-                        style="padding: 20px 40px; font-size:18px;">
-                        큐플 파트너십 상담 요청
+        <!-- FINAL CTA -->
+        <section id="consulting" class="final-cta bg-dark">
+            <div class="container text-center">
+                <h2>
+                    지금 필요한 건, 더 많은 시도가 아니라<br />
+                    무엇을 먼저 정리할지 아는 일입니다
+                </h2>
+                <p>
+                    현재 운영 상태를 먼저 확인해보세요.
+                </p>
+                <div class="btn-wrap">
+                    <a href="https://forms.gle/7UopsG7yx8f425HF7" target="_blank" class="btn btn-dark-outline">
+                        내 숙소 운영 구조 확인하기
                     </a>
                 </div>
             </div>
         </section>
-
     </main>
 
     <!-- FOOTER -->
-    <footer id="main-footer" class="bg-dark text-white border-top-dark" style="padding: 60px 0 40px;">
-        <div class="container" style="display: flex; flex-direction: column; align-items: center; text-align: center;">
-            <div class="footer-logo mb-4" style="margin-bottom: 20px;">큐플 컴퍼니 (Cu: Ple company)</div>
+    <footer>
+        <div class="container" style="text-align:center;">
+            <div class="footer-logo" style="display: flex; justify-content: center;">
+                <img src="assets/cuple_logo.jpg" alt="큐플 컴퍼니" style="height: 192px; width: auto;" />
+            </div>
 
-            <div style="display: flex; gap: 40px; margin-bottom: 30px; flex-wrap: wrap; justify-content: center;">
+            <div class="footer-contact">
                 <div>
-                    <span class="label"
-                        style="display: block; font-size: 14px; color: rgba(255, 255, 255, 0.5); margin-bottom: 5px;">고객센터</span>
-                    <a href="tel:0507-1358-3642" class="value"
-                        style="font-size: 20px; color: var(--color-white); text-decoration: none; font-weight: 600; font-family: 'Outfit', sans-serif;">0507-1358-3642</a>
+                    <span class="label">고객센터</span>
+                    <a href="tel:0507-1358-3642" class="value">0507-1358-3642</a>
                 </div>
                 <div>
-                    <span class="label"
-                        style="display: block; font-size: 14px; color: rgba(255, 255, 255, 0.5); margin-bottom: 5px;">이메일</span>
-                    <a href="mailto:contact@curatep.com" class="value"
-                        style="font-size: 20px; color: var(--color-white); text-decoration: none; font-weight: 600; font-family: 'Outfit', sans-serif;">contact@curatep.com</a>
+                    <span class="label">이메일</span>
+                    <a href="mailto:contact@curatep.com" class="value">contact@curatep.com</a>
                 </div>
             </div>
 
-            <div class="footer-bottom"
-                style="margin-top: 10px; padding-top: 20px; border-top: 1px solid rgba(255, 255, 255, 0.1); width: 100%; max-width: 600px;">
+            <div class="footer-bottom">
                 &copy; 2026 큐플 컴퍼니. All rights reserved.
             </div>
         </div>
     </footer>
 
-    <script src="main.js"></script>
-</body>
+    <script>
+        const faqItems = document.querySelectorAll('.faq-item');
 
+        faqItems.forEach(item => {
+            const header = item.querySelector('.faq-header');
+            const body = item.querySelector('.faq-body');
+
+            header.addEventListener('click', () => {
+                const isActive = item.classList.contains('active');
+
+                faqItems.forEach(other => {
+                    other.classList.remove('active');
+                    other.querySelector('.faq-body').style.maxHeight = null;
+                });
+
+                if (!isActive) {
+                    item.classList.add('active');
+                    body.style.maxHeight = body.scrollHeight + 'px';
+                }
+            });
+        });
+
+        // Diagnosis Accordian Logic
+        document.querySelectorAll('.diagnosis-toggle').forEach(button => {
+            button.addEventListener('click', () => {
+                const card = button.parentElement;
+
+                document.querySelectorAll('.diagnosis-card').forEach(c => {
+                    if (c !== card) c.classList.remove('active');
+                });
+
+                card.classList.toggle('active');
+            });
+        });
+        // Review Read More Logic
+        document.addEventListener('DOMContentLoaded', () => {
+            document.querySelectorAll('.review-grid .review-card').forEach(card => {
+                // Select only the first review-text block containing the user feedback, not the interpretation
+                const reviewTextContainer = card.querySelectorAll('.review-text')[0];
+                const reviewTagsContainer = card.querySelector('.review-tags');
+
+                if (reviewTextContainer) {
+                    const contentDiv = document.createElement('div');
+                    contentDiv.className = 'review-text-content';
+                    // Move all child nodes from reviewTextContainer to contentDiv
+                    while (reviewTextContainer.firstChild) {
+                        contentDiv.appendChild(reviewTextContainer.firstChild);
+                    }
+                    reviewTextContainer.appendChild(contentDiv);
+
+                    // We want to hide tags initially.
+                    if (reviewTagsContainer) {
+                        reviewTagsContainer.style.display = 'none';
+                    }
+
+                    // Defer the check to allow CSS rendering to finish computing scrollHeight
+                    setTimeout(() => {
+                        const isOverflowing = contentDiv.scrollHeight > contentDiv.clientHeight;
+
+                        // If text is overflowing OR we have tags to expand, add the button
+                        if (isOverflowing || reviewTagsContainer) {
+                            const moreBtn = document.createElement('button');
+                            moreBtn.className = 'review-more-btn';
+                            moreBtn.textContent = '더보기';
+
+                            moreBtn.addEventListener('click', () => {
+                                contentDiv.classList.toggle('expanded');
+                                const isExpanded = contentDiv.classList.contains('expanded');
+                                moreBtn.textContent = isExpanded ? '접기' : '더보기';
+
+                                if (reviewTagsContainer) {
+                                    reviewTagsContainer.style.display = isExpanded ? 'flex' : 'none';
+                                }
+                            });
+
+                            if (reviewTagsContainer) {
+                                card.insertBefore(moreBtn, reviewTagsContainer.nextSibling);
+                            } else {
+                                card.insertBefore(moreBtn, reviewTextContainer.nextSibling);
+                            }
+                        }
+                    }, 100);
+                }
+            });
+        });
+    </script>
+</body>
 
 </html>

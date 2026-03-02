@@ -1,16 +1,39 @@
 document.addEventListener("DOMContentLoaded", () => {
-    // 1. Accordion implementation (FAQ & Engine)
-    const accordions = document.querySelectorAll(".accordion-header, .engine-header, .faq-header");
+    // 1. Accordion implementation (FAQ & Engine & System)
+    const accordions = document.querySelectorAll(".accordion-header, .engine-header, .faq-header, .system-header");
     accordions.forEach((acc) => {
         acc.addEventListener("click", function () {
-            this.classList.toggle("active");
-            const panel = this.nextElementSibling;
-            if (panel.style.maxHeight) {
-                panel.style.maxHeight = null;
-                panel.classList.remove('active');
-            } else {
-                panel.style.maxHeight = panel.scrollHeight + 60 + "px"; // added extra padding buffer
-                panel.classList.add('active');
+            // Find if this accordion belongs to a group (e.g. system accordion)
+            const parentContainer = this.closest('.engine-grid, .faq-container');
+            const isActive = this.classList.contains("active");
+
+            // Close all accordions in the same container first (exclusive accordion behavior)
+            if (parentContainer) {
+                const siblings = parentContainer.querySelectorAll(".accordion-header, .engine-header, .faq-header, .system-header");
+                siblings.forEach((sibling) => {
+                    sibling.classList.remove("active");
+                    const siblingPanel = sibling.nextElementSibling;
+                    if (siblingPanel) {
+                        siblingPanel.style.maxHeight = null;
+                        siblingPanel.classList.remove('active');
+                        // Also remove active from parent card if it exists (for styling)
+                        const parentCard = sibling.closest('.engine-item');
+                        if (parentCard) parentCard.classList.remove('active');
+                    }
+                });
+            }
+
+            // If it wasn't active before we closed everything, open it
+            if (!isActive) {
+                this.classList.add("active");
+                const panel = this.nextElementSibling;
+                if (panel) {
+                    panel.style.maxHeight = panel.scrollHeight + 60 + "px"; // added extra padding buffer
+                    panel.classList.add('active');
+                    // Add active to parent card if it exists (for styling)
+                    const parentCard = this.closest('.engine-item');
+                    if (parentCard) parentCard.classList.add('active');
+                }
             }
         });
     });
