@@ -189,14 +189,16 @@
         }
 
         .btn-kakao {
-            background-color: #FEE500;
+            background-color: hsl(54, 85%, 50%);
+            /* originally #FEE500 */
             color: #191919;
             border: none;
             font-weight: 700;
         }
 
         .btn-kakao:hover {
-            background-color: #F4DC00;
+            background-color: hsl(54, 85%, 48%);
+            /* originally #F4DC00 */
             color: #191919;
             border-color: transparent;
         }
@@ -395,6 +397,12 @@
             /* slightly stronger shadow */
             border-color: #d1d6db;
             /* slightly darker border */
+        }
+
+        .what-card.secondary {
+            background: #f8fafc;
+            /* 약간 다른 배경톤 (연한 블루/그레이) */
+            border-color: #eef2f6;
         }
 
         .what-card::after {
@@ -626,13 +634,41 @@
         .work-card {
             padding: 28px;
             text-align: left;
+            position: relative;
+            overflow: hidden;
         }
 
         .work-card h3 {
             margin-bottom: 14px;
+            position: relative;
+            z-index: 1;
+        }
+
+        .work-card-icon {
+            position: absolute;
+            right: 12px;
+            top: 2px;
+            width: 96px;
+            height: 96px;
+            color: var(--color-accent) !important;
+            opacity: 0.08;
+            z-index: 0;
+            pointer-events: none;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .work-card-icon svg {
+            width: 100%;
+            height: 100%;
+            display: block;
+            stroke-width: 1px;
         }
 
         .work-card p {
+            position: relative;
+            z-index: 1;
             color: var(--color-text-dim);
             font-size: 16px;
             line-height: 1.8;
@@ -764,7 +800,7 @@
         }
 
         .dash-metric .value .up {
-            color: #ef4444;
+            color: hsl(0, 69%, 60%);
             font-size: 13px;
             font-weight: 800;
         }
@@ -842,10 +878,8 @@
 
         .pc-header {
             padding: 24px 24px 18px;
-            color: #15803d;
-            /* Text color matched to stabilization badge text */
-            background: #dcfce7;
-            /* Background color matched to stabilization badge */
+            color: #FFFFFF;
+            background: hsl(147, 82%, 39%);
             display: flex;
             align-items: center;
             justify-content: center;
@@ -854,7 +888,7 @@
         }
 
         .pc-header.green {
-            background: #dcfce7;
+            background: hsl(147, 82%, 39%);
         }
 
         .pc-header h3 {
@@ -1113,6 +1147,7 @@
 
         .faq-header .icon {
             color: #8b95a1;
+            font-size: 16px;
             transition: transform 0.2s ease;
             flex-shrink: 0;
         }
@@ -1641,6 +1676,8 @@
                         매출이 흔들리는 이유는<br />
                         시설이 아니라 구조입니다.
                     </h1>
+                    <p style="font-size: 14px; color: #6b7684; margin-top: 12px; font-weight: 600;">ㅣ실제 운영 데이터를 기반으로 구조를
+                        재설계합니다.</p>
 
                     <p class="hero-subtitle">
                         매출이 늘어도 수익이 남지 않는 구조라면,
@@ -1758,7 +1795,9 @@
 
                         <p style="margin-top: 24px; font-size: 20px; color: var(--color-primary); font-weight: 800;">
                             결국 문제는 채널의 수가 아니라<br />
-                            운영 구조가 하나로 정리되어 있지 않다는 점입니다.
+                            운영 구조가 하나로 정리되어 있지 않다는 점입니다.<br /><br />
+                            그래서 더 많은 시도를 하지만,<br />
+                            구조는 그대로인 경우가 많습니다.
                         </p>
                     </div>
                 </div>
@@ -1802,7 +1841,7 @@
                         </p>
                     </div>
 
-                    <div class="what-card fade-in">
+                    <div class="what-card fade-in secondary">
                         <div class="what-card-watermark">03</div>
                         <div class="card-topline">
                             <span class="num-chip">03</span>
@@ -1815,7 +1854,7 @@
                         </p>
                     </div>
 
-                    <div class="what-card fade-in">
+                    <div class="what-card fade-in secondary">
                         <div class="what-card-watermark">04</div>
                         <div class="card-topline">
                             <span class="num-chip">04</span>
@@ -1830,7 +1869,8 @@
                 </div>
 
                 <div class="what-note">
-                    * 모든 숙소와 함께하지는 않습니다. 실제로 바꿀 수 있는 부분이 있는 곳과만 함께합니다.
+                    * 모든 숙소와 함께하지는 않습니다. 실제로 바꿀 수 있는 부분이 있는 곳과만 함께합니다.<br />
+                    진단 후, 바로 적용 여부를 안내드립니다.
                 </div>
             </div>
         </section>
@@ -2045,6 +2085,16 @@
                         <div class="card-topline">
                             <span class="num-chip">01</span>
                         </div>
+                        <div class="work-card-icon">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
+                                fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                                stroke-linejoin="round">
+                                <rect width="7" height="7" x="3" y="3" rx="1" />
+                                <rect width="7" height="7" x="14" y="3" rx="1" />
+                                <rect width="7" height="7" x="14" y="14" rx="1" />
+                                <rect width="7" height="7" x="3" y="14" rx="1" />
+                            </svg>
+                        </div>
                         <h3>기본 정리</h3>
                         <p>
                             가격, 상품, 상세페이지, 응대 기준을 먼저 바로잡습니다.<br />
@@ -2055,6 +2105,15 @@
                     <div class="work-card fade-in">
                         <div class="card-topline">
                             <span class="num-chip">02</span>
+                        </div>
+                        <div class="work-card-icon">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
+                                fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                                stroke-linejoin="round">
+                                <path d="M4 14.899A7 7 0 1 1 15.71 8h1.79a4.5 4.5 0 0 1 2.5 8.242" />
+                                <path d="M12 12v9" />
+                                <path d="m8 17 4 4 4-4" />
+                            </svg>
                         </div>
                         <h3>예약 흐름 강화</h3>
                         <p>
@@ -2067,6 +2126,18 @@
                     <div class="work-card fade-in">
                         <div class="card-topline">
                             <span class="num-chip">03</span>
+                        </div>
+                        <div class="work-card-icon">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
+                                fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                                stroke-linejoin="round">
+                                <path
+                                    d="m12 3-1.912 5.813a2 2 0 0 1-1.275 1.275L3 12l5.813 1.912a2 2 0 0 1 1.275 1.275L12 21l1.912-5.813a2 2 0 0 1 1.275-1.275L21 12l-5.813-1.912a2 2 0 0 1-1.275-1.275L12 3Z" />
+                                <path d="M5 3v4" />
+                                <path d="M19 17v4" />
+                                <path d="M3 5h4" />
+                                <path d="M17 19h4" />
+                            </svg>
                         </div>
                         <h3>기반 보완 제안</h3>
                         <p>
@@ -2217,14 +2288,14 @@
                                         <span class="kw-name">산청 글램핑</span>
                                         <span class="kw-meta">월간 검색수 3,220회</span>
                                     </div>
-                                    <div class="kw-rank">🏆 1위</div>
+                                    <div class="kw-rank">1위</div>
                                 </div>
                                 <div class="kw-item">
                                     <div>
                                         <span class="kw-name">경남 글램핑</span>
                                         <span class="kw-meta">75위 → 20위 → 1위 / 월간 12,430회</span>
                                     </div>
-                                    <div class="kw-rank">🏆 1위</div>
+                                    <div class="kw-rank">1위</div>
                                 </div>
                             </div>
 
@@ -2241,7 +2312,7 @@
                                     <tr>
                                         <th>총 광고비</th>
                                         <td style="text-decoration:line-through; color:#8b95a1;">2,452,835원</td>
-                                        <td style="font-weight:800; color:#ef4444;">342,573원 (86% 절감)</td>
+                                        <td style="font-weight:800; color:hsl(0, 60%, 60%);">342,573원 (86% 절감)</td>
                                     </tr>
                                     <tr>
                                         <th>평균 CTR</th>
@@ -2306,6 +2377,8 @@
                 <div class="section-header text-center">
                     <span class="eyebrow">Real Reviews</span>
                     <h2>구조 개선 이후 고객 반응</h2>
+                    <p style="font-size: 15px; color: #4e5968; margin-top: 10px; font-weight: 600;">구조를 정리하면, 리뷰의 단어가
+                        달라집니다.</p>
                 </div>
 
                 <div class="review-grid">
@@ -2606,6 +2679,7 @@
             </div>
         </section>
 
+
         <!-- FINAL CTA -->
         <section id="consulting" class="final-cta bg-dark">
             <div class="container text-center">
@@ -2625,11 +2699,16 @@
         </section>
     </main>
 
+    <div
+        style="text-align: center; padding: 32px 24px; background: #191f28; color: rgba(255,255,255,0.75); font-size: 15px; font-weight: 600;">
+        무리한 계약은 권하지 않습니다. 적용이 어렵다면 솔직하게 안내드립니다.
+    </div>
+
     <!-- FOOTER -->
     <footer>
         <div class="container" style="text-align:center;">
             <div class="footer-logo" style="display: flex; justify-content: center;">
-                <img src="cuple_logo.jpg" alt="큐플 컴퍼니" style="height: 192px; width: auto;" />
+                <img src="assets/cuple_logo.jpg" alt="큐플 컴퍼니" style="height: 192px; width: auto;" />
             </div>
 
             <div class="footer-contact">
@@ -2736,6 +2815,5 @@
         });
     </script>
 </body>
-
 
 </html>
